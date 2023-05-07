@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { CliCommandInterface } from './cli-command.interface';
+import { CliCommandInterface } from '../../types/cli-command.interface';
 import path from 'node:path';
 
 export default class VersionCommand implements CliCommandInterface{
