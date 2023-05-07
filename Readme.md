@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
-* Студент: [Анастасия Меркулова](https://up.htmlacademy.ru/nodejs-api/4/user/1984913).
-* Наставник: `Неизвестно`.
+- Студент: [Анастасия Меркулова](https://up.htmlacademy.ru/nodejs-api/4/user/1984913).
+- Наставник: [Семён Якушев](https://htmlacademy.ru/profile/id1118791).
 
 ---
 
