@@ -60,21 +60,6 @@
       "Amsterdam 52.370216 4.895168",
       "Hamburg 53.550341 10.000654",
       "Dusseldorf 51.225402 6.776314"
-    ],
-    "types": [
-      "apartment",
-      "house",
-      "room",
-      "hotel"
-    ],
-    "goods": [
-      "Breakfast",
-      "Air conditioning",
-      "Laptop friendly workspace",
-      "Baby seat",
-      "Washer",
-      "Towels",
-      "Fridge"
     ]
   }
 }

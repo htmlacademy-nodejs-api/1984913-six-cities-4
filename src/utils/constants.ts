@@ -42,6 +42,7 @@ export const OfferGuestsAmount = {
 export const OfferRating = {
   Min: 1,
   Max: 5,
+  Decimals:1,
 };
 
 export const OfferPrice = {

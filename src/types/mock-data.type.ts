@@ -7,6 +7,4 @@ export type MockData = {
   emails: string[],
   avatars: string[],
   cities: string[],
-  types: string[],
-  goods: string[]
 }
