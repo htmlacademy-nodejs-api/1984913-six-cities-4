@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
-import { MockData } from '../../../types/mock-data.type';
-import { OfferGeneratorInterface } from '../../../types/offer-generator.interface';
+import { MockData } from '../../../types/mock-data.type.js';
+import { OfferGeneratorInterface } from '../../../types/offer-generator.interface.js';
 import { GoodType, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount, OfferType } from '../../../utils/constants.js';
-import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers';
+import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
 
 const FIRST_WEEK_DAY = 1;
 const LAST_WEEK_DAY = 7;

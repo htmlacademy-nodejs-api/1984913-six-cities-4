@@ -7,8 +7,19 @@ export const HELP_COMMANDS = ` Команды:
   --generate <n> <path> <url>  # генерирует произвольное количество тестовых данных`;
 
 export const ErrorMessage = {
-  Import: 'Не удалось импортировать данные. Ошибка: '
+  Import: 'Не удалось импортировать данные. Ошибка: ',
+  Fetch: 'Can\'t fetch data from '
 }as const;
+
+export const InfoMessage = {
+  Import: 'Import completed. Rows amount: ',
+  Generate: 'File successfully generated: ',
+}as const;
+
+export const ChunkSize = {
+  Read:16384,
+  Write: 2 ** 16
+};
 
 export const UserNameLength = {
   Min: 1,
