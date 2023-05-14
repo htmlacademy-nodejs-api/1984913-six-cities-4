@@ -1,0 +1,65 @@
+{
+  "api": {
+    "titles": [
+      "Предложение 1",
+      "Предложение 2",
+      "Предложение 3",
+      "Предложение 4",
+      "Предложение 5"
+    ],
+    "descriptions": [
+      "Описание 1",
+      "Описание 2",
+      "Описание 3",
+      "Описание 4",
+      "Описание 5"
+    ],
+    "previewImages": [
+      "img1.jpg",
+      "img2.jpg",
+      "img3.jpg",
+      "img4.jpg",
+      "img5.jpg"
+    ],
+    "images": [
+      "photo1.jpg",
+      "photo2.jpg",
+      "photo3.jpg",
+      "photo4.jpg",
+      "photo5.jpg",
+      "photo6.jpg",
+      "photo7.jpg",
+      "photo8.jpg",
+      "photo9.jpg"
+    ],
+    "users": [
+      "User 1",
+      "User 2",
+      "User 3",
+      "User 4",
+      "User 5"
+    ],
+    "emails": [
+      "user1@mail.com",
+      "user2@mail.com",
+      "user3@mail.com",
+      "user4@mail.com",
+      "user5@mail.com"
+    ],
+    "avatars": [
+      "user1.jpg",
+      "user2.jpg",
+      "user3.jpg",
+      "user4.jpg",
+      "user5.jpg"
+    ],
+    "cities": [
+      "Paris 48.85661 2.351499",
+      "Cologne 50.938361 6.959974",
+      "Brussels 50.846557 4.351697",
+      "Amsterdam 52.370216 4.895168",
+      "Hamburg 53.550341 10.000654",
+      "Dusseldorf 51.225402 6.776314"
+    ]
+  }
+}

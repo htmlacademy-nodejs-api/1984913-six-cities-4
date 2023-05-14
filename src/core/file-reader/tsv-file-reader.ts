@@ -1,52 +1,39 @@
-import { readFileSync } from 'node:fs';
-import { Offer } from '../../types/offer.type.js';
+import { createReadStream } from 'node:fs';
 import { FileReaderInterface } from '../../types/file-reader.interface.js';
-import { CityType, OfferType } from '../../utils/constants.js';
-import { GoodType } from '../../utils/constants.js';
+import EventEmitter from 'node:events';
+import { ChunkSize } from '../../utils/constants.js';
 
-export default class TSVFileReader implements FileReaderInterface {
-  private rawData = '';
-
-  constructor(public filename: string) { }
-
-  public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf8' });
+export default class TSVFileReader extends EventEmitter implements FileReaderInterface {
+  constructor(public filename: string) {
+    super();
   }
 
-  public toArray(): Offer[] {
-    if (!this.rawData) {
-      return [];
+  public async read(): Promise<void> {
+    const readStream = createReadStream(this.filename, {
+      highWaterMark:ChunkSize.Read,
+      encoding:'utf-8'
+    });
+    const lineBreak = '\n';
+
+    let remainingData = '';
+    let nextRowPosition = -1;
+    let rowsAmount = 0;
+
+    for await (const chunk of readStream) {
+      remainingData += chunk.toString();
+
+      while ((nextRowPosition = remainingData.indexOf(lineBreak)) >= 0) {
+        const completeRow = remainingData.slice(0, nextRowPosition + 1);
+        remainingData = remainingData.slice(++nextRowPosition);
+        rowsAmount++;
+
+        this.emit('row', completeRow);
+      }
     }
 
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim() !== '')
-      .map((line) => line.split('\t'))
-      .map(([title, description, postDate, city, previewImage, images, isPremium, isFavorite, rating, type, rooms, guests, price, goods, name, email, avatarUrl, isPro, latitude, longitude]) => ({
-        title,
-        description,
-        postDate: new Date(postDate),
-        city: city as CityType,
-        previewImage,
-        images: images.split(';').map((image) => (image)),
-        isPremium: JSON.parse(isPremium),
-        isFavorite: JSON.parse(isFavorite),
-        rating: Number.parseFloat(rating),
-        type: type as OfferType,
-        rooms: Number.parseInt(rooms, 10),
-        guests: Number.parseInt(guests, 10),
-        price: Number.parseInt(price, 10),
-        goods: goods.split(';').map((good) => (good as GoodType)),
-        user: {
-          name,
-          email,
-          avatarUrl,
-          isPro: JSON.parse(isPro)
-        },
-        location: {
-          latitude: Number.parseFloat(latitude),
-          longitude: Number.parseFloat(longitude)
-        }
-      }));
+    this.emit('complete', rowsAmount);
+
   }
+
+
 }
