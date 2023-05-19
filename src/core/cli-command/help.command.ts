@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { HELP_TITLE, HELP_COMMANDS, HELP_EXAMPLE } from '../../utils/constants.js';
-import { CliCommandInterface } from '../../types/cli-command.interface.js';
+import { CliCommandInterface } from '../../types/core/cli-command.interface.js';
 
 const coloredTitle = chalk.bold(HELP_TITLE);
 const coloredExample = chalk.bgGray(HELP_EXAMPLE);

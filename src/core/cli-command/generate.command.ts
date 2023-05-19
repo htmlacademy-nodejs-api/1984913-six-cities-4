@@ -2,7 +2,7 @@ import got from 'got';
 import { MockData } from '../../types/mock-data.type.js';
 import { ErrorMessage, InfoMessage } from '../../utils/constants.js';
 import OfferGenerator from '../modules/offer-generator/offer-generator.js';
-import { CliCommandInterface } from '../../types/cli-command.interface.js';
+import { CliCommandInterface } from '../../types/core/cli-command.interface.js';
 import TSVFileWriter from '../file-reader/tsv-file-writer.js';
 import chalk from 'chalk';
 

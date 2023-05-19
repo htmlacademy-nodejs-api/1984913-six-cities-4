@@ -1,5 +1,5 @@
 import { createReadStream } from 'node:fs';
-import { FileReaderInterface } from '../../types/file-reader.interface.js';
+import { FileReaderInterface } from '../../types/core/file-reader.interface.js';
 import EventEmitter from 'node:events';
 import { ChunkSize } from '../../utils/constants.js';
 
