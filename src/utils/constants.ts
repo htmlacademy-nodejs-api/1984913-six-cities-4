@@ -8,12 +8,18 @@ export const HELP_COMMANDS = ` Команды:
 
 export const ErrorMessage = {
   Import: 'Не удалось импортировать данные. Ошибка: ',
-  Fetch: 'Can\'t fetch data from '
+  Fetch: 'Can\'t fetch data from ',
+  Config: 'Can\'t read .env file. Perhaps the file does not exist.'
 }as const;
 
 export const InfoMessage = {
   Import: 'Import completed. Rows amount: ',
   Generate: 'File successfully generated: ',
+}as const;
+
+export const LoggerInfoMessage = {
+  Initialization: 'Application initialization...',
+  Config: '.env file found and successfully parsed.',
 }as const;
 
 export const ChunkSize = {
