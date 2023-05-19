@@ -1,5 +1,5 @@
-import { CliCommandInterface } from '../types/cli-command.interface';
-import { ParsedCommand } from '../types/command.type.js';
+import { CliCommandInterface } from '../types/core/cli-command.interface';
+import { ParsedCommand } from '../types/core/command.type.js';
 
 export default class CLIApplication{
   private commands:{[propertyName:string]:CliCommandInterface} = {};

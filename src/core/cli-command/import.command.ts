@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { CliCommandInterface } from '../../types/cli-command.interface.js';
+import { CliCommandInterface } from '../../types/core/cli-command.interface.js';
 import { ErrorMessage, InfoMessage } from '../../utils/constants.js';
 import TSVFileReader from '../file-reader/tsv-file-reader.js';
 import { createOffer, getErrorMessage } from '../helpers/index.js';

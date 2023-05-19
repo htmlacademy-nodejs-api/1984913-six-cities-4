@@ -1,4 +1,4 @@
-import { LoggerInterface } from '../types/logger.interface';
+import { LoggerInterface } from '../types/core/logger.interface';
 
 export default class Application {
   constructor(
