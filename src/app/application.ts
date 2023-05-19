@@ -1,12 +1,14 @@
 import { ConfigSchema } from '../core/config/config.schema';
 import { ConfigInterface } from '../types/core/config.interface';
 import { LoggerInterface } from '../types/core/logger.interface';
-import { LoggerInfoMessage } from '../utils/constants.js';
+import { AppComponent, LoggerInfoMessage } from '../utils/constants.js';
+import { inject, injectable } from 'inversify';
 
+@injectable()
 export default class Application {
   constructor(
-    private readonly logger: LoggerInterface,
-    private readonly config: ConfigInterface<ConfigSchema>
+   @inject(AppComponent.LoggerInterface) private readonly logger: LoggerInterface,
+   @inject(AppComponent.ConfigInterface) private readonly config: ConfigInterface<ConfigSchema>
   ) {}
 
   public async init() {

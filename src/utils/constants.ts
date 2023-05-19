@@ -27,6 +27,12 @@ export const ChunkSize = {
   Write: 2 ** 16
 };
 
+export const AppComponent = {
+  Application: Symbol.for('Application'),
+  LoggerInterface: Symbol.for('LoggerInterface'),
+  ConfigInterface: Symbol.for('ConfigInterface'),
+} as const;
+
 export const UserNameLength = {
   Min: 1,
   Max: 15,
