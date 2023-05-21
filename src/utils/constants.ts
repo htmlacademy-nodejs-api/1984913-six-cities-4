@@ -6,10 +6,16 @@ export const HELP_COMMANDS = ` Команды:
   --import <path>:             # импортирует данные из TSV
   --generate <n> <path> <url>  # генерирует произвольное количество тестовых данных`;
 
+export const DB_RECONNECT_COUNT = 5;
+export const DB_RECONNECT_TIMEOUT = 10000;
+
 export const ErrorMessage = {
   Import: 'Не удалось импортировать данные. Ошибка: ',
   Fetch: 'Can\'t fetch data from ',
-  Config: 'Can\'t read .env file. Perhaps the file does not exist.'
+  Config: 'Can\'t read .env file. Perhaps the file does not exist.',
+  DbConnect:'Already connected to database',
+  DbConnectFail:'Failed to connect to the database.',
+  DbDisconnect:'Not connected to the database'
 }as const;
 
 export const InfoMessage = {
@@ -18,8 +24,18 @@ export const InfoMessage = {
 }as const;
 
 export const LoggerInfoMessage = {
-  Initialization: 'Application initialization...',
+  InitApp: 'Application initialization...',
   Config: '.env file found and successfully parsed.',
+  DbConnect:'Database connection established.',
+  DbConnectInProgress:'Trying to connect to MongoDB...',
+  DbDisconnect:'Database connection closed.',
+  InitDb:'Init database...',
+  InitDbDone:'Init database completed',
+}as const;
+
+export const LoggerErrorMessage = {
+  DbConnectFail: 'Failed to connect to the database. Attempt ',
+  DbConnectMultipleFail: 'Unable to establish database connection.',
 }as const;
 
 export const ChunkSize = {
@@ -31,6 +47,7 @@ export const AppComponent = {
   Application: Symbol.for('Application'),
   LoggerInterface: Symbol.for('LoggerInterface'),
   ConfigInterface: Symbol.for('ConfigInterface'),
+  DatabaseClientInterface: Symbol.for('DatabaseClientInterface'),
 } as const;
 
 export const UserNameLength = {
