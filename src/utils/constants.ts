@@ -31,7 +31,7 @@ export const LoggerInfoMessage = {
   DbDisconnect:'Database connection closed.',
   InitDb:'Init database...',
   InitDbDone:'Init database completed',
-  NewUser:'New user created: ',
+  NewData:'New data created: ',
 }as const;
 
 export const LoggerErrorMessage = {
@@ -51,6 +51,8 @@ export const AppComponent = {
   DatabaseClientInterface: Symbol.for('DatabaseClientInterface'),
   UserServiceInterface: Symbol.for('UserServiceInterface'),
   UserModel: Symbol.for('UserModel'),
+  LocationServiceInterface: Symbol.for('LocationServiceInterface'),
+  LocationModel: Symbol.for('LocationModel'),
 } as const;
 
 export const UserNameLength = {

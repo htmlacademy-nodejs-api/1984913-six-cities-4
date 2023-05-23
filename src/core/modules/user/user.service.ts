@@ -17,9 +17,9 @@ export default class UserService implements UserServiceInterface {
     const user = new UserEntity(dto);
     user.setPassword(dto.password, salt);
 
-    const result = this.userModel.create(user);
+    const result = await this.userModel.create(user);
 
-    this.logger.info(LoggerInfoMessage.NewUser);
+    this.logger.info(LoggerInfoMessage.NewData.concat('user'));
 
     return result;
   }
