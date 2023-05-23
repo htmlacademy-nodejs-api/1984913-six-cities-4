@@ -53,6 +53,8 @@ export const AppComponent = {
   UserModel: Symbol.for('UserModel'),
   LocationServiceInterface: Symbol.for('LocationServiceInterface'),
   LocationModel: Symbol.for('LocationModel'),
+  OfferServiceInterface: Symbol.for('OfferServiceInterface'),
+  OfferModel: Symbol.for('OfferModel'),
 } as const;
 
 export const UserNameLength = {
@@ -95,7 +97,7 @@ export const OfferPrice = {
   Max: 100000,
 };
 
-export enum OfferType {
+export enum HomeType {
   Apartment = 'apartment',
   House = 'house',
   Room = 'room',

@@ -8,7 +8,7 @@ import LocationService from './location.service.js';
 export function createLocationContainer() {
   const container = new Container();
   container.bind<LocationServiceInterface>(AppComponent.LocationServiceInterface).to(LocationService).inSingletonScope();
-  container.bind<types.ModelType<LocationEntity>>(AppComponent.LocationServiceInterface).toConstantValue(LocationModel);
+  container.bind<types.ModelType<LocationEntity>>(AppComponent.LocationModel).toConstantValue(LocationModel);
 
   return container;
 }

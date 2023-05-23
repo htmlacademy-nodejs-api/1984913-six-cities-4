@@ -8,7 +8,7 @@ import { types } from '@typegoose/typegoose';
 export function createUserContainer() {
   const container = new Container();
   container.bind<UserServiceInterface>(AppComponent.UserServiceInterface).to(UserService).inSingletonScope();
-  container.bind<types.ModelType<UserEntity>>(AppComponent.UserServiceInterface).toConstantValue(UserModel);
+  container.bind<types.ModelType<UserEntity>>(AppComponent.UserModel).toConstantValue(UserModel);
 
   return container;
 }

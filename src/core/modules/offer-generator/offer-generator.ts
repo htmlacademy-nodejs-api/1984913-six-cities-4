@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { MockData } from '../../../types/mock-data.type.js';
 import { OfferGeneratorInterface } from '../../../types/core/offer-generator.interface.js';
-import { GoodType, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount, OfferType } from '../../../utils/constants.js';
+import { GoodType, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount, HomeType } from '../../../utils/constants.js';
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
 
 const FIRST_WEEK_DAY = 1;
@@ -20,7 +20,7 @@ export default class OfferGenerator implements OfferGeneratorInterface{
     const email = getRandomItem<string>(this.mockData.emails);
     const avatarUrl = getRandomItem<string>(this.mockData.avatars);
     const [city, latitude, longitude] = getRandomItem<string>(this.mockData.cities).split(' ');
-    const type = getRandomItem<string>(Object.values(OfferType));
+    const type = getRandomItem<string>(Object.values(HomeType));
     const isPremium = getRandomItem<string>(statusValues);
     const isFavorite = getRandomItem<string>(statusValues);
     const isPro = getRandomItem<string>(statusValues);

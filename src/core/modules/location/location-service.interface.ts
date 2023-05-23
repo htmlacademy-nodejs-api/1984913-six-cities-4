@@ -5,8 +5,8 @@ import { LocationType } from '../../../types/offer.type.js';
 
 export interface LocationServiceInterface {
   create(dto: CreateLocationDto): Promise<DocumentType<LocationEntity>>;
-  findByLocationId(LocationId: string): Promise<DocumentType<LocationEntity> | null>;
-  findByLocation(Location: LocationType): Promise<DocumentType<LocationEntity> | null>;
-  findByCity(City: string): Promise<DocumentType<LocationEntity> | null>;
-  findByLocationOrCreate(Location: LocationType, dto: CreateLocationDto): Promise<DocumentType<LocationEntity>>;
+  findByLocationId(locationId: string): Promise<DocumentType<LocationEntity> | null>;
+  findByLocation(location: LocationType): Promise<DocumentType<LocationEntity> | null>;
+  findByCity(city: string): Promise<DocumentType<LocationEntity> | null>;
+  findByLocationOrCreate(location: LocationType, dto: CreateLocationDto): Promise<DocumentType<LocationEntity>>;
 }

@@ -1,4 +1,4 @@
-import { CityType, GoodType, OfferType } from '../utils/constants.js';
+import { CityType, GoodType, HomeType } from '../utils/constants.js';
 import { User } from './user.type.js';
 
 export type LocationType = {
@@ -6,7 +6,7 @@ export type LocationType = {
   longitude: number
   }
 
-export type Offer = {
+export type OfferType = {
   title: string
   description: string
   postDate: Date
@@ -16,7 +16,7 @@ export type Offer = {
   isPremium: boolean
   isFavorite: boolean
   rating: number
-  type: OfferType
+  type: HomeType
   rooms: number
   guests: number
   price: number
