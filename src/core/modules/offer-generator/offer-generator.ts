@@ -25,7 +25,7 @@ export default class OfferGenerator implements OfferGeneratorInterface{
     const isFavorite = getRandomItem<string>(statusValues);
     const isPro = getRandomItem<string>(statusValues);
     const images = getRandomItems<string>(this.mockData.images);
-    const goods = getRandomItems<string>(Object.values(GoodType));
+    const goods = getRandomItems<string>(Object.values(GoodType)).join(';');
     const rating = generateRandomValue(OfferRating.Min,OfferRating.Max,OfferRating.Decimals);
     const rooms = generateRandomValue(OfferRoomsAmount.Min,OfferRoomsAmount.Max);
     const guests = generateRandomValue(OfferGuestsAmount.Min,OfferGuestsAmount.Max);

@@ -9,6 +9,9 @@ export const HELP_COMMANDS = ` Команды:
 export const DB_RECONNECT_COUNT = 5;
 export const DB_RECONNECT_TIMEOUT = 10000;
 
+export const DEFAULT_DB_PORT = '27017';
+export const DEFAULT_USER_PASSWORD = '123456';
+
 export const ErrorMessage = {
   Import: 'Не удалось импортировать данные. Ошибка: ',
   Fetch: 'Can\'t fetch data from ',

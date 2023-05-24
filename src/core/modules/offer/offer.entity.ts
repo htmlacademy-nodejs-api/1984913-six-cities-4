@@ -34,7 +34,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true,})
   public previewImage!: string;
 
-  @prop({required: true,})
+  @prop({required: true, type:String})
   public images!: string[];
 
   @prop({required: true,})
@@ -62,7 +62,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true,})
   public price!: number;
 
-  @prop({ required: true, type: ()=>String, enum: GoodType })
+  @prop({ required: true,type:String, enum: GoodType })
   public goods!: GoodType[];
 
   @prop({
