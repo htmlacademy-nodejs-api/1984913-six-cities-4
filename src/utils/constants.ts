@@ -128,3 +128,7 @@ export enum CityType {
   Dusseldorf = 'Dusseldorf',
 }
 
+export enum UserStatus{
+  Regular='regular',
+  Pro='pro'
+}

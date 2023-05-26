@@ -1,6 +1,8 @@
+import { UserStatus } from '../utils/constants.js';
+
 export type User = {
   name: string
   email: string
   avatarUrl: string
-  isPro: boolean
+  userStatus: UserStatus
   }
