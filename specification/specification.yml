@@ -1,0 +1,167 @@
+openapi: 3.1.0
+info:
+  title: API сервер для проекта «Шесть городов».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 4.0.0
+tags:
+  - name: offers
+    description: Действия с объявлениями.
+  - name: comments
+    description: Действия с комментариями.
+  - name: users
+    description: Действия с пользователем.
+
+paths:
+
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Создание нового пользователя #5.8
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/registerUser'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "409":
+          description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя #5.9
+      description: Авторизует пользователя на основе логина и пароля
+      requestBody:
+        description: Информация для авторизации - логин и пароль.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginUser'
+        required: true
+
+      responses:
+        "201":
+          description: Успешная авторизация.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userWithToken'
+
+        "401":
+          description: Не удалось авторизоваться. Пользователь не найден.
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя #5.11
+      description: Возвращает информацию по авторизованному пользователю
+      schema:
+            description: Токен авторизации
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+            required: true
+
+      responses:
+        "200":
+          description: Проверка авторизации пройдена успешно.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "401":
+          description: Пользователь не авторизован.
+
+  /users/logout:
+    delete:
+      tags:
+        - users
+      summary: Завершение пользовательского сеанса #5.10
+      description: Завершает сеанс работы — выход из закрытой части приложения.
+
+      responses:
+        "204":
+          description: Успешное завершение сеанса.
+
+        "400":
+          description: Не удалось завершить сеанс.
+
+components:
+  schemas:
+    registerUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@test.ru
+        name:
+          type: string
+          example: User
+        password:
+          type: string
+          example: 123456
+        userStatus:
+          type: string
+          enum: [standard, pro]
+          example: regular
+
+    loginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@test.ru
+        password:
+          type: string
+          example: 123456
+
+    user:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: user@test.ru
+        name:
+          type: string
+          example: User
+        userStatus:
+          type: string
+          enum: [standard, pro]
+          example: regular
+
+    userWithToken:
+      type: object
+
+      properties:
+        token:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        email:
+          type: string
+          example: user@test.ru
+        name:
+          type: string
+          example: User
+        userStatus:
+          type: string
+          enum: [standard, pro]
+          example: regular
