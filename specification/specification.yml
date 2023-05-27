@@ -67,7 +67,7 @@ paths:
               content:
                 application/json:
                   schema:
-                    $ref: '#/components/schemas/createOffer'
+                    $ref: '#/components/schemas/offerFullInfo'
               required: true
       responses:
           "201":
@@ -75,13 +75,129 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/createOffer'
+                  $ref: '#/components/schemas/offerFullInfo'
 
           "400":
             description: Ошибка тела запроса.
 
           "401":
             description: Пользователь не авторизован.
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Получение детальной информации по предложению #5.5
+      description: Возвращает  информацию по одному предложению
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+          type: string
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        '200':
+          description: Предложение
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerFullInfo'
+        '400':
+            description: Не удалось получить информацию по предложению. Ошибка тела запроса.
+        '404':
+            description: Не удалось получить информацию по предложению. Предложение с таким идентификатором не существует.
+
+    patch:
+      tags:
+        - offers
+      summary: Редактирование предложения #5.2
+      description: Редактирование предложения, созданного пользователем
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+          type: string
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+          requestBody:
+            description: Информация для отправки предложения.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/editOffer'
+            required: true
+      responses:
+        '200':
+          description: Отредактированное предложение
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerFullInfo'
+        '400':
+            description: Не удалось изменить предложение. Ошибка тела запроса.
+        '401':
+            description: Не удалось изменить предложение. Пользователь не авторизован.
+        '403':
+            description: Не удалось изменить предложение. Нет прав доступа.
+        '404':
+            description: Не удалось изменить предложение. Предложение с таким идентификатором не существует.
+
+    delete:
+      tags:
+        - offers
+      summary:  Удаление предложения по аренде #5.3
+      description: Удаление своего предложения по аренде.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        "204":
+          description: Предложение удалено.
+
+        "400":
+          description: Не удалось удалить предложение. Неправильные данные.
+
+        "401":
+          description: Не удалось удалить предложение. Пользователь не авторизован.
+
+        "403":
+          description: Не удалось удалить предложение. Ошибка доступа.
+
+        "404":
+          description: Не удалось удалить предложение. Предложение не найдено.
 
   /comments/{offerId}:
     post:
@@ -247,7 +363,17 @@ paths:
 components:
   schemas:
 
-    createOffer:
+    editOffer:
+        type: object
+        properties:
+          offerId:
+            type: number
+            example: 1
+          offer:
+            type: object
+            $ref: '#/components/schemas/offerFullInfo'
+
+    offerFullInfo:
         type: object
         properties:
           title:
@@ -340,10 +466,10 @@ components:
             example: 1
 
     offersList:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/offer'
+        type: array
+        items:
+          type: object
+          $ref: '#/components/schemas/offer'
 
     comment:
         type: object
