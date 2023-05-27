@@ -9,13 +9,153 @@ info:
   version: 4.0.0
 tags:
   - name: offers
-    description: Действия с объявлениями.
+    description: Действия с предложениями.
   - name: comments
     description: Действия с комментариями.
   - name: users
     description: Действия с пользователем.
 
 paths:
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Получение списка  предложений #5.4
+      description: Возвращает список предложений (не более 60 по умолчанию)
+      parameters:
+        - name: amount
+          in: query
+          schema:
+            type: integer
+            example: 50
+          description: Требуемое количество предложений
+          required: false
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+          type: string
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+      responses:
+        '200':
+          description: Список предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offersList'
+        '400':
+            description: Не удалось получить список предложений. Ошибка тела запроса.
+
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения #5.1
+      description: Создает новое предложение
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+          requestBody:
+              description: Информация для отправки предложения.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/createOffer'
+              required: true
+      responses:
+          "201":
+            description: Предложение создано.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/createOffer'
+
+          "400":
+            description: Ошибка тела запроса.
+
+          "401":
+            description: Пользователь не авторизован.
+
+  /comments/{offerId}:
+    post:
+      tags:
+        - comments
+      summary: Добавление комментария #5.7
+      description: Добавляет комментарий к определенному предложению
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+              description: Информация для отправки комментария.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/comment'
+              required: true
+      responses:
+          "201":
+            description: Комментарий отправлен.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/comment'
+
+          "400":
+            description: Ошибка тела запроса.
+
+          "401":
+            description: Пользователь не авторизован.
+
+    get:
+      tags:
+        - comments
+      summary: Получение списка комментариев #5.6
+      description: Возвращает список комментариев для определенного предложения
+      parameters:
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+      responses:
+        '200':
+          description: Список комментариев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/commentsList'
+        '400':
+          description: Не удалось получить список комментариев. Ошибка тела запроса.
 
   /users/register:
     post:
@@ -106,6 +246,127 @@ paths:
 
 components:
   schemas:
+
+    createOffer:
+        type: object
+        properties:
+          title:
+            type: string
+            example: Big cozy house
+          description:
+            type: string
+            example: The house in Paris near the center of the city
+          postDate:
+            type: string
+            example: 2023-05-27T18:16:00Z
+          city:
+            type: string
+            example: Paris
+          previewImage:
+            type: string
+            example: previewImage.jpg
+          images:
+            type: array
+            items:
+                type: string
+                example: image.jpg
+          isPremium:
+            type: boolean
+            example: false
+          isFavorite:
+            type: boolean
+            example: false
+          rating:
+            type: number
+            example: 1
+          homeType:
+            type: string
+            example: house
+          rooms:
+            type: number
+            example: 2
+          guests:
+            type: number
+            example: 2
+          price:
+            type: number
+            example: 150
+          goods:
+            type: string
+            enum: [Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge]
+            example: Breakfast
+          user:
+            $ref: '#/components/schemas/user'
+          comments:
+            type: number
+            example: 2
+          location:
+            $ref: '#/components/schemas/location'
+
+
+    offer:
+        type: object
+
+        properties:
+          price:
+            type: number
+            example: 150
+          title:
+            type: string
+            example: Big cozy house
+          homeType:
+            type: string
+            example: house
+          isFavorite:
+            type: boolean
+            example: false
+          postDate:
+            type: string
+            example: 2023-05-27T17:30:00Z
+          city:
+            type: string
+            example: Paris
+          previewImage:
+            type: string
+            example: previewImage.jpg
+          isPremium:
+            type: boolean
+            example: false
+          rating:
+            type: number
+            example: 1
+          comments:
+            type: number
+            example: 1
+
+    offersList:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/offer'
+
+    comment:
+        type: object
+
+        properties:
+          text:
+            type: string
+            example: Текст комментария.
+          postDate:
+            type: string
+            example: 2023-05-27T17:30:00Z
+          rating:
+            type: number
+            example: 1
+          author:
+            $ref: '#/components/schemas/user'
+
+    commentsList:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/comment'
+
     registerUser:
       type: object
       properties:
@@ -154,14 +415,18 @@ components:
       properties:
         token:
           type: string
-          example: 6329c3d6a04ab1061c6425ea
-        email:
-          type: string
-          example: user@test.ru
-        name:
-          type: string
-          example: User
-        userStatus:
-          type: string
-          enum: [standard, pro]
-          example: regular
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        user:
+          $ref: '#/components/schemas/user'
+
+    location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 48.85661
+        longitude:
+          type: number
+          format: float
+          example: 2.351499
