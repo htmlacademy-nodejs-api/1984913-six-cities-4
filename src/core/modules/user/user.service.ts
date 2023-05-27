@@ -3,8 +3,9 @@ import {DocumentType, types} from '@typegoose/typegoose';
 import CreateUserDto from './dto/create-user.dto.js';
 import {UserServiceInterface} from './user-service.interface.js';
 import { inject, injectable } from 'inversify';
-import { AppComponent, LoggerInfoMessage } from '../../../utils/constants.js';
 import { LoggerInterface } from '../../../types/core/logger.interface.js';
+import { AppComponent } from '../../../types/app-component.enum.js';
+import { LoggerInfoMessage } from '../../logger/logger.constants.js';
 
 @injectable()
 export default class UserService implements UserServiceInterface {

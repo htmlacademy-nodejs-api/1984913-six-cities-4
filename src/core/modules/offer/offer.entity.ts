@@ -2,7 +2,8 @@ import typegoose, {
   getModelForClass,
   defaultClasses, Ref
 } from '@typegoose/typegoose';
-import { CityType, DEFAULT_COMMENTS_AMOUNT, GoodType, HomeType, OfferRating } from '../../../utils/constants.js';
+import { DEFAULT_COMMENTS_AMOUNT } from '../../../utils/constants.js';
+import { CityType, GoodType, HomeType, OfferRating } from './offer.constants.js';
 import { UserEntity } from '../user/user.entity.js';
 import { LocationEntity } from '../location/location.entity.js';
 

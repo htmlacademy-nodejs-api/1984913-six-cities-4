@@ -26,21 +26,6 @@ export const InfoMessage = {
   Generate: 'File successfully generated: ',
 }as const;
 
-export const LoggerInfoMessage = {
-  InitApp: 'Application initialization...',
-  Config: '.env file found and successfully parsed.',
-  DbConnect:'Database connection established.',
-  DbConnectInProgress:'Trying to connect to MongoDB...',
-  DbDisconnect:'Database connection closed.',
-  InitDb:'Init database...',
-  InitDbDone:'Init database completed',
-  NewData:'New data created: ',
-}as const;
-
-export const LoggerErrorMessage = {
-  DbConnectFail: 'Failed to connect to the database. Attempt ',
-  DbConnectMultipleFail: 'Unable to establish database connection.',
-}as const;
 
 export const ChunkSize = {
   Read:16384,
@@ -48,83 +33,3 @@ export const ChunkSize = {
 };
 
 export const DEFAULT_COMMENTS_AMOUNT = 0;
-
-export const AppComponent = {
-  Application: Symbol.for('Application'),
-  LoggerInterface: Symbol.for('LoggerInterface'),
-  ConfigInterface: Symbol.for('ConfigInterface'),
-  DatabaseClientInterface: Symbol.for('DatabaseClientInterface'),
-  UserServiceInterface: Symbol.for('UserServiceInterface'),
-  UserModel: Symbol.for('UserModel'),
-  LocationServiceInterface: Symbol.for('LocationServiceInterface'),
-  LocationModel: Symbol.for('LocationModel'),
-  OfferServiceInterface: Symbol.for('OfferServiceInterface'),
-  OfferModel: Symbol.for('OfferModel'),
-} as const;
-
-export const UserNameLength = {
-  Min: 1,
-  Max: 15,
-};
-export const UserPasswordLength = {
-  Min: 6,
-  Max: 12,
-};
-
-export const OfferTitleLength = {
-  Min: 10,
-  Max: 100,
-};
-
-export const OfferDescriptionLength = {
-  Min: 20,
-  Max: 1024,
-};
-
-export const OfferRoomsAmount = {
-  Min: 1,
-  Max: 8,
-};
-
-export const OfferGuestsAmount = {
-  Min: 1,
-  Max: 10,
-};
-
-export const OfferRating = {
-  Min: 1,
-  Max: 5,
-  Decimals:1,
-};
-
-export const OfferPrice = {
-  Min: 100,
-  Max: 100000,
-};
-
-export enum HomeType {
-  Apartment = 'apartment',
-  House = 'house',
-  Room = 'room',
-  Hotel = 'hotel'
-}
-
-export enum GoodType {
-  Breakfast = 'Breakfast',
-  AirConditioning = 'Air conditioning',
-  LaptopWorkspace = 'Laptop friendly workspace',
-  BabySeat = 'Baby seat',
-  Washer = 'Washer',
-  Towels = 'Towels',
-  Fridge = 'Fridge',
-}
-
-export enum CityType {
-  Paris = 'Paris',
-  Cologne = 'Cologne',
-  Brussels = 'Brussels',
-  Amsterdam = 'Amsterdam',
-  Hamburg = 'Hamburg',
-  Dusseldorf = 'Dusseldorf',
-}
-

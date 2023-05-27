@@ -1,4 +1,4 @@
-import { CityType, GoodType, HomeType} from '../../../../utils/constants.js';
+import { CityType, GoodType, HomeType} from '../offer.constants.js';
 
 
 export default class CreateOfferDto{

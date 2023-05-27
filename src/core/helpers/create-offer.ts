@@ -1,15 +1,16 @@
 import { OfferType } from '../../types/offer.type.js';
-import { CityType, GoodType, HomeType } from '../../utils/constants.js';
+import { CityType, GoodType, HomeType } from '../modules/offer/offer.constants.js';
+import { UserStatus } from '../modules/user/user.constants.js';
 
 export const createOffer = (offerData:string):OfferType=>{
 
-  const [title, description, postDate, city, previewImage, images, isPremium, isFavorite, rating, type, rooms, guests, price, goods, name, email, avatarUrl, isPro, latitude, longitude] = offerData.replace('\n','').split('\t');
+  const [title, description, postDate, city, previewImage, images, isPremium, isFavorite, rating, type, rooms, guests, price, goods, name, email, avatarUrl, userStatus, latitude, longitude] = offerData.replace('\n','').split('\t');
 
   const user = {
     name,
     email,
     avatarUrl,
-    isPro: JSON.parse(isPro)
+    userStatus: userStatus as UserStatus
   };
 
   const location = {
