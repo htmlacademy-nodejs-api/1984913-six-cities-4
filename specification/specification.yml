@@ -35,19 +35,23 @@ paths:
           description: Авторизационный токен пользователя
           required: false
           schema:
-          type: string
-          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
       responses:
-        '200':
+        "200":
           description: Список предложений
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/offersList'
-        '400':
-            description: Не удалось получить список предложений. Ошибка тела запроса.
+                  $ref: "#/components/schemas/offersList"
+        "400":
+          description: Не удалось получить список предложений. Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
 
     post:
       tags:
@@ -63,25 +67,32 @@ paths:
             type: string
             example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
           requestBody:
-              description: Информация для отправки предложения.
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/offerFullInfo'
-              required: true
-      responses:
-          "201":
-            description: Предложение создано.
+            description: Информация для отправки предложения.
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/offerFullInfo'
+                  $ref: "#/components/schemas/offerFullInfo"
+            required: true
+      responses:
+        "201":
+          description: Предложение создано.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offerFullInfo"
 
-          "400":
-            description: Ошибка тела запроса.
-
-          "401":
-            description: Пользователь не авторизован.
+        "400":
+          description: Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
 
   /offers/{offerId}:
     get:
@@ -105,19 +116,26 @@ paths:
             type: number
             example: 1
       responses:
-        '200':
+        "200":
           description: Предложение
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/offerFullInfo'
-        '400':
-            description: Не удалось получить информацию по предложению. Ошибка тела запроса.
-        '404':
-            description: Не удалось получить информацию по предложению. Предложение с таким идентификатором не существует.
-
+                  $ref: "#/components/schemas/offerFullInfo"
+        "400":
+          description: Не удалось получить информацию по предложению. Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "404":
+          description: Не удалось получить информацию по предложению. Предложение с таким идентификатором не существует.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorMessage"
     patch:
       tags:
         - offers
@@ -129,8 +147,8 @@ paths:
           description: Авторизационный токен пользователя
           required: true
           schema:
-          type: string
-          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
         - name: offerId
           in: path
           description: Уникальный идентификатор предложения
@@ -143,30 +161,47 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/editOffer'
+                  $ref: "#/components/schemas/editOffer"
             required: true
       responses:
-        '200':
+        "200":
           description: Отредактированное предложение
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/offerFullInfo'
-        '400':
-            description: Не удалось изменить предложение. Ошибка тела запроса.
-        '401':
-            description: Не удалось изменить предложение. Пользователь не авторизован.
-        '403':
-            description: Не удалось изменить предложение. Нет прав доступа.
-        '404':
-            description: Не удалось изменить предложение. Предложение с таким идентификатором не существует.
+                  $ref: "#/components/schemas/offerFullInfo"
+        "400":
+          description: Не удалось изменить предложение. Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "401":
+          description: Не удалось изменить предложение. Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+        "403":
+          description: Не удалось изменить предложение. Недостаточно прав для доступа к данным.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenErrorMessage"
+
+        "404":
+          description: Не удалось изменить предложение. Предложение с таким идентификатором не существует.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorMessage"
 
     delete:
       tags:
         - offers
-      summary:  Удаление предложения по аренде #5.3
+      summary: Удаление предложения по аренде #5.3
       description: Удаление своего предложения по аренде.
       parameters:
         - name: X-Token
@@ -188,16 +223,146 @@ paths:
           description: Предложение удалено.
 
         "400":
-          description: Не удалось удалить предложение. Неправильные данные.
-
+          description: Не удалось удалить предложение. Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
         "401":
           description: Не удалось удалить предложение. Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
 
         "403":
           description: Не удалось удалить предложение. Ошибка доступа.
-
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenErrorMessage"
         "404":
           description: Не удалось удалить предложение. Предложение не найдено.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorMessage"
+
+  /offers/premium:
+    get:
+    tags:
+      - offers
+    summary: Получение списка  премиальных предложений #5.12
+    description: Возвращает список премиальных предложений (не более 3)
+    parameters:
+      - name: X-Token
+        in: header
+        description: Авторизационный токен пользователя
+        required: false
+        schema:
+          type: string
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+    responses:
+      "200":
+        description: Список премиальных предложений
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/offersList"
+
+  /offers/favorite:
+    get:
+      tags:
+        - offers
+      summary: Получение списка  избранных предложений #5.13
+      description: Возвращает список избранных предложений
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+      responses:
+        "200":
+          description: Список избранных предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offersList"
+          "400":
+            description: Ошибка тела запроса.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/BadRequestErrorMessage"
+          "401":
+            description: Пользователь не авторизован.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+
+          "403":
+            description: Недостаточно прав для доступа к данным.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ForbiddenErrorMessage"
+
+  /offers/favorite/{offerId}:
+    patch:
+      tags:
+        - offers
+      summary: Изменение статуса "избранное" предложения #5.14
+      description: Добавляет или удаляет предложение в/из списка избранных предложений.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: status
+          in: query
+          description: Статус "избранное" 1 - добавляет в избранное, 0 - удаляет из избранного.
+          required: true
+          schema:
+            type: boolean
+            example: true
+      responses:
+        "200":
+          description: Предложение
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offerFullInfo"
+          "400":
+            description: Ошибка тела запроса.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/BadRequestErrorMessage"
+          "401":
+            description: Пользователь не авторизован.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+          "403":
+            description: Недостаточно прав для доступа к данным.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ForbiddenErrorMessage"
 
   /comments/{offerId}:
     post:
@@ -221,25 +386,32 @@ paths:
             type: number
             example: 1
       requestBody:
-              description: Информация для отправки комментария.
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/comment'
-              required: true
+        description: Информация для отправки комментария.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/comment"
+        required: true
       responses:
-          "201":
-            description: Комментарий отправлен.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/comment'
+        "201":
+          description: Комментарий отправлен.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/comment"
 
-          "400":
-            description: Ошибка тела запроса.
-
-          "401":
-            description: Пользователь не авторизован.
+        "400":
+          description: Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
 
     get:
       tags:
@@ -262,16 +434,20 @@ paths:
             type: string
             example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
       responses:
-        '200':
+        "200":
           description: Список комментариев
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/commentsList'
-        '400':
+                  $ref: "#/components/schemas/commentsList"
+        "400":
           description: Не удалось получить список комментариев. Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
 
   /users/register:
     post:
@@ -285,7 +461,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/registerUser'
+              $ref: "#/components/schemas/registerUser"
         required: true
 
       responses:
@@ -294,7 +470,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/user'
+                $ref: "#/components/schemas/user"
 
         "409":
           description: Пользователь с таким email уже существует.
@@ -310,7 +486,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/loginUser'
+              $ref: "#/components/schemas/loginUser"
         required: true
 
       responses:
@@ -319,10 +495,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/userWithToken'
+                $ref: "#/components/schemas/userWithToken"
 
         "401":
           description: Не удалось авторизоваться. Пользователь не найден.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
 
     get:
       tags:
@@ -330,10 +510,10 @@ paths:
       summary: Проверка состояния пользователя #5.11
       description: Возвращает информацию по авторизованному пользователю
       schema:
-            description: Токен авторизации
-            type: string
-            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
-            required: true
+        description: Токен авторизации
+        type: string
+        example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        required: true
 
       responses:
         "200":
@@ -341,10 +521,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/user'
+                $ref: "#/components/schemas/user"
 
         "401":
           description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
 
   /users/logout:
     delete:
@@ -359,139 +543,150 @@ paths:
 
         "400":
           description: Не удалось завершить сеанс.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
 
 components:
   schemas:
-
     editOffer:
-        type: object
-        properties:
-          offerId:
-            type: number
-            example: 1
-          offer:
-            type: object
-            $ref: '#/components/schemas/offerFullInfo'
+      type: object
+      properties:
+        offerId:
+          type: number
+          example: 1
+        offer:
+          type: object
+          $ref: "#/components/schemas/offerFullInfo"
 
     offerFullInfo:
-        type: object
-        properties:
-          title:
-            type: string
-            example: Big cozy house
-          description:
-            type: string
-            example: The house in Paris near the center of the city
-          postDate:
-            type: string
-            example: 2023-05-27T18:16:00Z
-          city:
-            type: string
-            example: Paris
-          previewImage:
-            type: string
-            example: previewImage.jpg
-          images:
-            type: array
-            items:
-                type: string
-                example: image.jpg
-          isPremium:
-            type: boolean
-            example: false
-          isFavorite:
-            type: boolean
-            example: false
-          rating:
-            type: number
-            example: 1
-          homeType:
-            type: string
-            example: house
-          rooms:
-            type: number
-            example: 2
-          guests:
-            type: number
-            example: 2
-          price:
-            type: number
-            example: 150
-          goods:
-            type: string
-            enum: [Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge]
-            example: Breakfast
-          user:
-            $ref: '#/components/schemas/user'
-          comments:
-            type: number
-            example: 2
-          location:
-            $ref: '#/components/schemas/location'
-
-
-    offer:
-        type: object
-
-        properties:
-          price:
-            type: number
-            example: 150
-          title:
-            type: string
-            example: Big cozy house
-          homeType:
-            type: string
-            example: house
-          isFavorite:
-            type: boolean
-            example: false
-          postDate:
-            type: string
-            example: 2023-05-27T17:30:00Z
-          city:
-            type: string
-            example: Paris
-          previewImage:
-            type: string
-            example: previewImage.jpg
-          isPremium:
-            type: boolean
-            example: false
-          rating:
-            type: number
-            example: 1
-          comments:
-            type: number
-            example: 1
-
-    offersList:
-        type: array
-        items:
-          type: object
-          $ref: '#/components/schemas/offer'
-
-    comment:
-        type: object
-
-        properties:
-          text:
-            type: string
-            example: Текст комментария.
-          postDate:
-            type: string
-            example: 2023-05-27T17:30:00Z
-          rating:
-            type: number
-            example: 1
-          author:
-            $ref: '#/components/schemas/user'
-
-    commentsList:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Big cozy house
+        description:
+          type: string
+          example: The house in Paris near the center of the city
+        postDate:
+          type: string
+          example: 2023-05-27T18:16:00Z
+        city:
+          type: string
+          example: Paris
+        previewImage:
+          type: string
+          example: previewImage.jpg
+        images:
           type: array
           items:
-            type: object
-            $ref: '#/components/schemas/comment'
+            type: string
+            example: image.jpg
+        isPremium:
+          type: boolean
+          example: false
+        isFavorite:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 1
+        homeType:
+          type: string
+          example: house
+        rooms:
+          type: number
+          example: 2
+        guests:
+          type: number
+          example: 2
+        price:
+          type: number
+          example: 150
+        goods:
+          type: string
+          enum:
+            [
+              Breakfast,
+              Air conditioning,
+              Laptop friendly workspace,
+              Baby seat,
+              Washer,
+              Towels,
+              Fridge,
+            ]
+          example: Breakfast
+        user:
+          $ref: "#/components/schemas/user"
+        comments:
+          type: number
+          example: 2
+        location:
+          $ref: "#/components/schemas/location"
+
+    offer:
+      type: object
+
+      properties:
+        price:
+          type: number
+          example: 150
+        title:
+          type: string
+          example: Big cozy house
+        homeType:
+          type: string
+          example: house
+        isFavorite:
+          type: boolean
+          example: false
+        postDate:
+          type: string
+          example: 2023-05-27T17:30:00Z
+        city:
+          type: string
+          example: Paris
+        previewImage:
+          type: string
+          example: previewImage.jpg
+        isPremium:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 1
+        comments:
+          type: number
+          example: 1
+
+    offersList:
+      type: array
+      items:
+        type: object
+        $ref: "#/components/schemas/offer"
+
+    comment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Текст комментария.
+        postDate:
+          type: string
+          example: 2023-05-27T17:30:00Z
+        rating:
+          type: number
+          example: 1
+        author:
+          $ref: "#/components/schemas/user"
+
+    commentsList:
+      type: array
+      items:
+        type: object
+        $ref: "#/components/schemas/comment"
 
     registerUser:
       type: object
@@ -543,7 +738,7 @@ components:
           type: string
           example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
         user:
-          $ref: '#/components/schemas/user'
+          $ref: "#/components/schemas/user"
 
     location:
       type: object
@@ -556,3 +751,43 @@ components:
           type: number
           format: float
           example: 2.351499
+
+    NotFoundErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Предложение с таким идентификатором не существует.
+        errorCode:
+          type: string
+          example: Error 404 - Not Found.
+
+    NotAuthorizedErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Не удалось авторизоваться. Войдите снова чтобы продолжить
+        errorCode:
+          type: string
+          example: Error 401 - Unauthorized.
+
+    BadRequestErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Ошибка тела запроса.
+        errorCode:
+          type: string
+          example: Error 400 - Bad Request.
+
+    ForbiddenErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Недостаточно прав для доступа к данным
+        errorCode:
+          type: string
+          example: Error 403 - Forbidden.
