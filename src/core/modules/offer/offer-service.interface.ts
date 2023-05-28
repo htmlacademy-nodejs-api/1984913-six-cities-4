@@ -12,7 +12,7 @@ export interface OfferServiceInterface {
   findPremium(city:string): Promise<DocumentType<OfferEntity>[]>;
   findFavorite():Promise<DocumentType<OfferEntity>[]>;
   updateFavoriteStatus(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  updateCommentCountAndRaiting(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  countRating(offerId: string): Promise<number | null >;
+  updateCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  countRating(): Promise<number | null >;
   exists(documentId: string): Promise<boolean>;
 }

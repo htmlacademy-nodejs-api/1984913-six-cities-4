@@ -6,7 +6,7 @@ import { LoggerInterface } from '../../../types/core/logger.interface.js';
 import CreateOfferDto from './dto/create-offer.js';
 import { AppComponent } from '../../../types/app-component.enum.js';
 import { LoggerInfoMessage } from '../../logger/logger.constants.js';
-import { DEFAULT_AMOUNT, PREMIUM_AMOUNT } from './offer.constants.js';
+import { DEFAULT_OFFERS_AMOUNT, OfferRating, PREMIUM_OFFERS_AMOUNT } from './offer.constants.js';
 import UpdateOfferDto from './dto/update-offer.js';
 import { SORT_TYPE_DOWN } from '../../../utils/constants.js';
 
@@ -25,8 +25,9 @@ export default class OfferService implements OfferServiceInterface {
   }
 
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    const currentRating = this.countRating();
     return this.offerModel
-      .findByIdAndUpdate(offerId, dto, { new: true })
+      .findByIdAndUpdate(offerId, {...dto, rating:currentRating }, { new: true })
       .populate(['userId', 'locationId']).exec();
   }
 
@@ -37,7 +38,7 @@ export default class OfferService implements OfferServiceInterface {
   }
 
   public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
-    const limit = count ?? DEFAULT_AMOUNT;
+    const limit = count ?? DEFAULT_OFFERS_AMOUNT;
     return this.offerModel.find({}, {}, { limit }).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
   }
 
@@ -46,7 +47,7 @@ export default class OfferService implements OfferServiceInterface {
   }
 
   public async findPremium(city: string): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find({ isPremium: true, city: city }, {}, { limit: PREMIUM_AMOUNT }).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
+    return this.offerModel.find({ isPremium: true, city: city }, {}, { limit: PREMIUM_OFFERS_AMOUNT }).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
   }
 
   public async findFavorite(): Promise<DocumentType<OfferEntity>[]> {
@@ -59,13 +60,39 @@ export default class OfferService implements OfferServiceInterface {
       .findByIdAndUpdate(offerId, { isFavorite: !offer?.isFavorite }, { new: true }).populate(['userId', 'locationId']).exec();
   }
 
-  public async updateCommentCountAndRaiting(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async updateCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    const currentRating = this.countRating();
     return this.offerModel
       .findByIdAndUpdate(offerId, {
         '$inc': {
           commentCount: 1,
-        }
+        },
+        'set':{
+          rating:currentRating
+        },
       }).exec();
+  }
+
+  public async countRating(): Promise<number | null > {
+    const currentOfferWithRating = await this.offerModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'comments',
+            let:{offerId:'$_id'},
+            pipeline: [
+              {$match:{ $expr: {$in: ['$$offerId','$offerId']}}},
+              {$project: { rating: 1}},
+              {$group:{_id:null, averageRating:{$avg:'rating'}}}
+            ],
+            as:'result'
+          },
+        },
+        { $unwind: '$result' },
+        { $addFields: { rating: '$result.averageRating' }},
+        { $unset: 'result' },
+      ]);
+    return currentOfferWithRating[0] ? currentOfferWithRating[0].rating : OfferRating.Min;
   }
 
   public async exists(documentId: string): Promise<boolean> {

@@ -1,6 +1,5 @@
 import { CityType, GoodType, HomeType} from '../offer.constants.js';
 
-
 export default class UpdateOfferDto{
   public title?: string;
   public description?: string;

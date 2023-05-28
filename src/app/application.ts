@@ -1,7 +1,7 @@
 import { ConfigSchema } from '../core/config/config.schema';
 import { getMongoURI } from '../core/helpers/db.js';
-import { LoggerInfoMessage } from '../core/logger/logger.constants';
-import { AppComponent } from '../types/app-component.enum';
+import { LoggerInfoMessage } from '../core/logger/logger.constants.js';
+import { AppComponent } from '../types/app-component.enum.js';
 import { ConfigInterface } from '../types/core/config.interface';
 import { DatabaseClientInterface } from '../types/core/database-client.interface';
 import { LoggerInterface } from '../types/core/logger.interface';
