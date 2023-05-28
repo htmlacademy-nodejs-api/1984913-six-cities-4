@@ -32,4 +32,4 @@ export const ChunkSize = {
   Write: 2 ** 16
 };
 
-export const DEFAULT_COMMENTS_AMOUNT = 0;
+export const SORT_TYPE_DOWN = -1;

@@ -1,5 +1,6 @@
 export const DEFAULT_AMOUNT = 60;
 export const PREMIUM_AMOUNT = 3;
+export const DEFAULT_COMMENTS_AMOUNT = 0;
 
 export const OfferTitleLength = {
   Min: 10,

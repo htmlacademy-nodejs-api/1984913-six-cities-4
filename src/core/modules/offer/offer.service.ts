@@ -6,8 +6,9 @@ import { LoggerInterface } from '../../../types/core/logger.interface.js';
 import CreateOfferDto from './dto/create-offer.js';
 import { AppComponent } from '../../../types/app-component.enum.js';
 import { LoggerInfoMessage } from '../../logger/logger.constants.js';
-import { DEFAULT_AMOUNT } from './offer.constants.js';
+import { DEFAULT_AMOUNT, PREMIUM_AMOUNT } from './offer.constants.js';
 import UpdateOfferDto from './dto/update-offer.js';
+import { SORT_TYPE_DOWN } from '../../../utils/constants.js';
 
 @injectable()
 export default class OfferService implements OfferServiceInterface {
@@ -37,18 +38,34 @@ export default class OfferService implements OfferServiceInterface {
 
   public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
     const limit = count ?? DEFAULT_AMOUNT;
-    return this.offerModel.find({}, {}, { limit });
+    return this.offerModel.find({}, {}, { limit }).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
   }
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findById(offerId).populate(['userId', 'locationId']).exec();
   }
 
-  public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async findPremium(city: string): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.find({ isPremium: true, city: city }, {}, { limit: PREMIUM_AMOUNT }).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
+  }
+
+  public async findFavorite(): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.find({ isFavorite: true }).populate(['userId', 'locationId']).exec();
+  }
+
+  public async updateFavoriteStatus(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    const offer = this.offerModel.findById(offerId);
     return this.offerModel
-      .findByIdAndUpdate(offerId, {'$inc': {
-        commentCount: 1,
-      }}).exec();
+      .findByIdAndUpdate(offerId, { isFavorite: !offer?.isFavorite }, { new: true }).populate(['userId', 'locationId']).exec();
+  }
+
+  public async updateCommentCountAndRaiting(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, {
+        '$inc': {
+          commentCount: 1,
+        }
+      }).exec();
   }
 
   public async exists(documentId: string): Promise<boolean> {

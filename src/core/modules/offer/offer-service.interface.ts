@@ -9,10 +9,10 @@ export interface OfferServiceInterface {
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   find(count?:number): Promise<DocumentType<OfferEntity>[]>;
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  findPremium(count: number): Promise<DocumentType<OfferEntity>[]>;
+  findPremium(city:string): Promise<DocumentType<OfferEntity>[]>;
   findFavorite():Promise<DocumentType<OfferEntity>[]>;
   updateFavoriteStatus(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  updateCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  updateRating(offerId: string): Promise<number | null >;
+  updateCommentCountAndRaiting(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  countRating(offerId: string): Promise<number | null >;
   exists(documentId: string): Promise<boolean>;
 }
