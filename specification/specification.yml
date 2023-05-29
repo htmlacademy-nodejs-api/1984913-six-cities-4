@@ -1,0 +1,793 @@
+openapi: 3.1.0
+info:
+  title: API сервер для проекта «Шесть городов».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 4.0.0
+tags:
+  - name: offers
+    description: Действия с предложениями.
+  - name: comments
+    description: Действия с комментариями.
+  - name: users
+    description: Действия с пользователем.
+
+paths:
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Получение списка  предложений #5.4
+      description: Возвращает список предложений (не более 60 по умолчанию)
+      parameters:
+        - name: amount
+          in: query
+          schema:
+            type: integer
+            example: 50
+          description: Требуемое количество предложений
+          required: false
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+      responses:
+        "200":
+          description: Список предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offersList"
+        "400":
+          description: Не удалось получить список предложений. Ошибка тела запроса
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения #5.1
+      description: Создает новое предложение
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+          requestBody:
+            description: Информация для отправки предложения.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/offerFullInfo"
+            required: true
+      responses:
+        "201":
+          description: Предложение создано.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offerFullInfo"
+
+        "400":
+          description: Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Получение детальной информации по предложению #5.5
+      description: Возвращает  информацию по одному предложению
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+          type: string
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        "200":
+          description: Предложение
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offerFullInfo"
+        "400":
+          description: Не удалось получить информацию по предложению. Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "404":
+          description: Не удалось получить информацию по предложению. Предложение с таким идентификатором не существует.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorMessage"
+    patch:
+      tags:
+        - offers
+      summary: Редактирование предложения #5.2
+      description: Редактирование предложения, созданного пользователем
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+          requestBody:
+            description: Информация для отправки предложения.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/editOffer"
+            required: true
+      responses:
+        "200":
+          description: Отредактированное предложение
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offerFullInfo"
+        "400":
+          description: Не удалось изменить предложение. Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "401":
+          description: Не удалось изменить предложение. Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+        "403":
+          description: Не удалось изменить предложение. Недостаточно прав для доступа к данным.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenErrorMessage"
+
+        "404":
+          description: Не удалось изменить предложение. Предложение с таким идентификатором не существует.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorMessage"
+
+    delete:
+      tags:
+        - offers
+      summary: Удаление предложения по аренде #5.3
+      description: Удаление своего предложения по аренде.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        "204":
+          description: Предложение удалено.
+
+        "400":
+          description: Не удалось удалить предложение. Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "401":
+          description: Не удалось удалить предложение. Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+
+        "403":
+          description: Не удалось удалить предложение. Ошибка доступа.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenErrorMessage"
+        "404":
+          description: Не удалось удалить предложение. Предложение не найдено.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorMessage"
+
+  /offers/premium:
+    get:
+    tags:
+      - offers
+    summary: Получение списка  премиальных предложений #5.12
+    description: Возвращает список премиальных предложений (не более 3)
+    parameters:
+      - name: X-Token
+        in: header
+        description: Авторизационный токен пользователя
+        required: false
+        schema:
+          type: string
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+    responses:
+      "200":
+        description: Список премиальных предложений
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/offersList"
+
+  /offers/favorite:
+    get:
+      tags:
+        - offers
+      summary: Получение списка  избранных предложений #5.13
+      description: Возвращает список избранных предложений
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+      responses:
+        "200":
+          description: Список избранных предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offersList"
+          "400":
+            description: Ошибка тела запроса.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/BadRequestErrorMessage"
+          "401":
+            description: Пользователь не авторизован.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+
+          "403":
+            description: Недостаточно прав для доступа к данным.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ForbiddenErrorMessage"
+
+  /offers/favorite/{offerId}:
+    patch:
+      tags:
+        - offers
+      summary: Изменение статуса "избранное" предложения #5.14
+      description: Добавляет или удаляет предложение в/из списка избранных предложений.
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: status
+          in: query
+          description: Статус "избранное" 1 - добавляет в избранное, 0 - удаляет из избранного.
+          required: true
+          schema:
+            type: boolean
+            example: true
+      responses:
+        "200":
+          description: Предложение
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offerFullInfo"
+          "400":
+            description: Ошибка тела запроса.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/BadRequestErrorMessage"
+          "401":
+            description: Пользователь не авторизован.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+          "403":
+            description: Недостаточно прав для доступа к данным.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ForbiddenErrorMessage"
+
+  /comments/{offerId}:
+    post:
+      tags:
+        - comments
+      summary: Добавление комментария #5.7
+      description: Добавляет комментарий к определенному предложению
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+        description: Информация для отправки комментария.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/comment"
+        required: true
+      responses:
+        "201":
+          description: Комментарий отправлен.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/comment"
+
+        "400":
+          description: Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+
+    get:
+      tags:
+        - comments
+      summary: Получение списка комментариев #5.6
+      description: Возвращает список комментариев для определенного предложения
+      parameters:
+        - name: offerId
+          in: path
+          description: Уникальный идентификатор предложения
+          required: true
+          schema:
+            type: number
+            example: 1
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+      responses:
+        "200":
+          description: Список комментариев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/commentsList"
+        "400":
+          description: Не удалось получить список комментариев. Ошибка тела запроса.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Создание нового пользователя #5.8
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/registerUser"
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+
+        "409":
+          description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя #5.9
+      description: Авторизует пользователя на основе логина и пароля
+      requestBody:
+        description: Информация для авторизации - логин и пароль.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/loginUser"
+        required: true
+
+      responses:
+        "201":
+          description: Успешная авторизация.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userWithToken"
+
+        "401":
+          description: Не удалось авторизоваться. Пользователь не найден.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя #5.11
+      description: Возвращает информацию по авторизованному пользователю
+      schema:
+        description: Токен авторизации
+        type: string
+        example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        required: true
+
+      responses:
+        "200":
+          description: Проверка авторизации пройдена успешно.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotAuthorizedErrorMessage"
+
+  /users/logout:
+    delete:
+      tags:
+        - users
+      summary: Завершение пользовательского сеанса #5.10
+      description: Завершает сеанс работы — выход из закрытой части приложения.
+
+      responses:
+        "204":
+          description: Успешное завершение сеанса.
+
+        "400":
+          description: Не удалось завершить сеанс.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
+
+components:
+  schemas:
+    editOffer:
+      type: object
+      properties:
+        offerId:
+          type: number
+          example: 1
+        offer:
+          type: object
+          $ref: "#/components/schemas/offerFullInfo"
+
+    offerFullInfo:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Big cozy house
+        description:
+          type: string
+          example: The house in Paris near the center of the city
+        postDate:
+          type: string
+          example: 2023-05-27T18:16:00Z
+        city:
+          type: string
+          example: Paris
+        previewImage:
+          type: string
+          example: previewImage.jpg
+        images:
+          type: array
+          items:
+            type: string
+            example: image.jpg
+        isPremium:
+          type: boolean
+          example: false
+        isFavorite:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 1
+        homeType:
+          type: string
+          example: house
+        rooms:
+          type: number
+          example: 2
+        guests:
+          type: number
+          example: 2
+        price:
+          type: number
+          example: 150
+        goods:
+          type: string
+          enum:
+            [
+              Breakfast,
+              Air conditioning,
+              Laptop friendly workspace,
+              Baby seat,
+              Washer,
+              Towels,
+              Fridge,
+            ]
+          example: Breakfast
+        user:
+          $ref: "#/components/schemas/user"
+        comments:
+          type: number
+          example: 2
+        location:
+          $ref: "#/components/schemas/location"
+
+    offer:
+      type: object
+
+      properties:
+        price:
+          type: number
+          example: 150
+        title:
+          type: string
+          example: Big cozy house
+        homeType:
+          type: string
+          example: house
+        isFavorite:
+          type: boolean
+          example: false
+        postDate:
+          type: string
+          example: 2023-05-27T17:30:00Z
+        city:
+          type: string
+          example: Paris
+        previewImage:
+          type: string
+          example: previewImage.jpg
+        isPremium:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 1
+        comments:
+          type: number
+          example: 1
+
+    offersList:
+      type: array
+      items:
+        type: object
+        $ref: "#/components/schemas/offer"
+
+    comment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Текст комментария.
+        postDate:
+          type: string
+          example: 2023-05-27T17:30:00Z
+        rating:
+          type: number
+          example: 1
+        author:
+          $ref: "#/components/schemas/user"
+
+    commentsList:
+      type: array
+      items:
+        type: object
+        $ref: "#/components/schemas/comment"
+
+    registerUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@test.ru
+        name:
+          type: string
+          example: User
+        password:
+          type: string
+          example: 123456
+        userStatus:
+          type: string
+          enum: [standard, pro]
+          example: regular
+
+    loginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@test.ru
+        password:
+          type: string
+          example: 123456
+
+    user:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: user@test.ru
+        name:
+          type: string
+          example: User
+        userStatus:
+          type: string
+          enum: [standard, pro]
+          example: regular
+
+    userWithToken:
+      type: object
+
+      properties:
+        token:
+          type: string
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+        user:
+          $ref: "#/components/schemas/user"
+
+    location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 48.85661
+        longitude:
+          type: number
+          format: float
+          example: 2.351499
+
+    NotFoundErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Предложение с таким идентификатором не существует.
+        errorCode:
+          type: string
+          example: Error 404 - Not Found.
+
+    NotAuthorizedErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Не удалось авторизоваться. Войдите снова чтобы продолжить
+        errorCode:
+          type: string
+          example: Error 401 - Unauthorized.
+
+    BadRequestErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Ошибка тела запроса.
+        errorCode:
+          type: string
+          example: Error 400 - Bad Request.
+
+    ForbiddenErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Недостаточно прав для доступа к данным
+        errorCode:
+          type: string
+          example: Error 403 - Forbidden.
