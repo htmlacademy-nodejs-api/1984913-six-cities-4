@@ -1,5 +1,6 @@
 import { OfferType } from '../../types/offer.type.js';
-import { CityType, GoodType, HomeType, UserStatus } from '../../utils/constants.js';
+import { CityType, GoodType, HomeType } from '../modules/offer/offer.constants.js';
+import { UserStatus } from '../modules/user/user.constants.js';
 
 export const createOffer = (offerData:string):OfferType=>{
 
@@ -9,7 +10,7 @@ export const createOffer = (offerData:string):OfferType=>{
     name,
     email,
     avatarUrl,
-    userStatus:userStatus as UserStatus,
+    userStatus: userStatus as UserStatus
   };
 
   const location = {

@@ -1,9 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { DatabaseClientInterface } from '../../types/core/database-client.interface.js';
 import mongoose, { Mongoose } from 'mongoose';
-import { AppComponent, DB_RECONNECT_COUNT, DB_RECONNECT_TIMEOUT, ErrorMessage, LoggerErrorMessage, LoggerInfoMessage } from '../../utils/constants.js';
+import { DB_RECONNECT_COUNT, DB_RECONNECT_TIMEOUT, ErrorMessage } from '../../utils/constants.js';
 import { LoggerInterface } from '../../types/core/logger.interface.js';
 import { setTimeout } from 'node:timers/promises';
+import { AppComponent } from '../../types/app-component.enum.js';
+import { LoggerErrorMessage, LoggerInfoMessage } from '../logger/logger.constants.js';
 
 @injectable()
 export default class MongoClientService implements DatabaseClientInterface{

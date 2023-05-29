@@ -1,11 +1,12 @@
 import {DocumentType, types} from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
-import { AppComponent, LoggerInfoMessage } from '../../../utils/constants.js';
 import { LoggerInterface } from '../../../types/core/logger.interface.js';
 import { LocationServiceInterface } from './location-service.interface.js';
 import { LocationEntity } from './location.entity.js';
 import CreateLocationDto from './dto/create-location.dto.js';
 import { LocationType } from '../../../types/offer.type.js';
+import { AppComponent } from '../../../types/app-component.enum.js';
+import { LoggerInfoMessage } from '../../logger/logger.constants.js';
 
 @injectable()
 export default class LocationService implements LocationServiceInterface {

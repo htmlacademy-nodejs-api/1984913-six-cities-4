@@ -1,4 +1,4 @@
-import { CityType, GoodType, HomeType } from '../utils/constants.js';
+import { CityType, GoodType, HomeType } from '../core/modules/offer/offer.constants.js';
 import { User } from './user.type.js';
 
 export type LocationType = {

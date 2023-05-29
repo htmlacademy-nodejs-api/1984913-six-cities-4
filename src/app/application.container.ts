@@ -7,7 +7,7 @@ import ConfigService from '../core/config/config.service.js';
 import { DatabaseClientInterface } from '../types/core/database-client.interface.js';
 import MongoClientService from '../core/database-client/mongo-client.service.js';
 import Application from './application.js';
-import { AppComponent } from '../utils/constants.js';
+import { AppComponent } from '../types/app-component.enum.js';
 
 export function createApplicationContainer(){
   const container = new Container();

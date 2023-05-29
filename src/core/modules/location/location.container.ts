@@ -1,9 +1,9 @@
 import { Container } from 'inversify';
-import { AppComponent } from '../../../utils/constants.js';
 import { types } from '@typegoose/typegoose';
 import { LocationServiceInterface } from './location-service.interface.js';
 import { LocationEntity, LocationModel } from './location.entity.js';
 import LocationService from './location.service.js';
+import { AppComponent } from '../../../types/app-component.enum.js';
 
 export function createLocationContainer() {
   const container = new Container();
