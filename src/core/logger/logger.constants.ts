@@ -9,6 +9,10 @@ export const LoggerInfoMessage = {
   InitServer:'Init server...',
   InitServerDone:'Server started on ',
   NewData:'New data created: ',
+  NewRoute:'Route registered: ',
+  RegisterRoute:'Register routes for ',
+  InitController:'Controller initialization...',
+  InitControllerDone:'Controller initialization completed',
 }as const;
 
 export const LoggerErrorMessage = {

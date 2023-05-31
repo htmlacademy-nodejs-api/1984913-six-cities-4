@@ -42,9 +42,17 @@ export default class Application {
     this.logger.info(LoggerInfoMessage.InitServerDone.concat(pathName));
   }
 
+  private async _initController() {
+    this.logger.info(LoggerInfoMessage.InitController);
+
+
+    this.logger.info(LoggerInfoMessage.InitControllerDone);
+  }
+
   public async init() {
     this.logger.info(LoggerInfoMessage.InitApp);
     await this._initDb();
     await this._initServer();
+    await this._initController();
   }
 }
