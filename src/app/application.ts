@@ -6,16 +6,21 @@ import { ConfigInterface } from '../types/core/config.interface';
 import { DatabaseClientInterface } from '../types/core/database-client.interface';
 import { LoggerInterface } from '../types/core/logger.interface';
 import { inject, injectable } from 'inversify';
-
+import express, { Express } from 'express';
 @injectable()
 export default class Application {
-  constructor(
-   @inject(AppComponent.LoggerInterface) private readonly logger: LoggerInterface,
-   @inject(AppComponent.ConfigInterface) private readonly config: ConfigInterface<ConfigSchema>,
-   @inject(AppComponent.DatabaseClientInterface) private readonly databaseClient: DatabaseClientInterface
-  ) {}
+  private expressApplication: Express;
 
-  private async _initDb(){
+  constructor(
+    @inject(AppComponent.LoggerInterface) private readonly logger: LoggerInterface,
+    @inject(AppComponent.ConfigInterface) private readonly config: ConfigInterface<ConfigSchema>,
+    @inject(AppComponent.DatabaseClientInterface) private readonly databaseClient: DatabaseClientInterface
+  ) {
+    this.expressApplication = express();
+  }
+
+  private async _initDb() {
+    this.logger.info(LoggerInfoMessage.InitDb);
     const uri = getMongoURI(
       this.config.get('DB_USER'),
       this.config.get('DB_PASSWORD'),
@@ -23,14 +28,23 @@ export default class Application {
       this.config.get('DB_PORT'),
       this.config.get('DB_NAME')
     );
-    return this.databaseClient.connect(uri);
+    await this.databaseClient.connect(uri);
+    this.logger.info(LoggerInfoMessage.InitDbDone);
+  }
+
+  private async _initServer() {
+    this.logger.info(LoggerInfoMessage.InitServer);
+
+    const port = this.config.get('PORT');
+    this.expressApplication.listen(port);
+
+    const pathName = `http://localhost:${port}`;
+    this.logger.info(LoggerInfoMessage.InitServerDone.concat(pathName));
   }
 
   public async init() {
     this.logger.info(LoggerInfoMessage.InitApp);
-    this.logger.info(`Get value from env $PORT: ${this.config.get('PORT')}`);
-    this.logger.info(LoggerInfoMessage.InitDb);
     await this._initDb();
-    this.logger.info(LoggerInfoMessage.InitDbDone);
+    await this._initServer();
   }
 }

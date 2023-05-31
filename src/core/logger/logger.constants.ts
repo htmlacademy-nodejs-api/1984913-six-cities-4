@@ -6,6 +6,8 @@ export const LoggerInfoMessage = {
   DbDisconnect:'Database connection closed.',
   InitDb:'Init database...',
   InitDbDone:'Init database completed',
+  InitServer:'Init server...',
+  InitServerDone:'Server started on ',
   NewData:'New data created: ',
 }as const;
 

@@ -471,6 +471,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/user"
+        "400":
+          description: Не удалось зарегистрировать пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
 
         "409":
           description: Пользователь с таким email уже существует.
@@ -490,7 +496,7 @@ paths:
         required: true
 
       responses:
-        "201":
+        "200":
           description: Успешная авторизация.
           content:
             application/json:
