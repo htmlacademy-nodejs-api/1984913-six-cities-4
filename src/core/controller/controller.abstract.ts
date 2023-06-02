@@ -5,7 +5,7 @@ import { ControllerInterface } from '../../types/core/controller.interface';
 import { LoggerInterface } from '../../types/core/logger.interface';
 import { RouteInterface } from '../../types/router.interface';
 import { LoggerInfoMessage } from '../logger/logger.constants.js';
-
+import asyncHandler from 'express-async-handler';
 
 @injectable()
 export abstract class Controller implements ControllerInterface {
@@ -22,7 +22,7 @@ export abstract class Controller implements ControllerInterface {
   }
 
   public addRoute(route: RouteInterface) {
-    this._router[route.method](route.path, route.handler.bind(this));
+    this._router[route.method](route.path, asyncHandler(route.handler.bind(this)));
     const routeInfo = `${route.method.toUpperCase()} ${route.path}`;
     this.logger.info(LoggerInfoMessage.NewRoute.concat(routeInfo));
   }

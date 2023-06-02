@@ -7,7 +7,7 @@ import { DatabaseClientInterface } from '../types/core/database-client.interface
 import { LoggerInterface } from '../types/core/logger.interface';
 import { inject, injectable } from 'inversify';
 import express, { Express } from 'express';
-// import { ControllerInterface } from '../types/core/controller.interface';
+import { ControllerInterface } from '../types/core/controller.interface';
 import { ExceptionFilterInterface } from '../types/core/exception-filter.interface';
 @injectable()
 export default class Application {
@@ -18,7 +18,7 @@ export default class Application {
     @inject(AppComponent.ConfigInterface) private readonly config: ConfigInterface<ConfigSchema>,
     @inject(AppComponent.DatabaseClientInterface) private readonly databaseClient: DatabaseClientInterface,
     // @inject(AppComponent.OfferController) private readonly offerController: ControllerInterface,
-    // @inject(AppComponent.UserController) private readonly userController: ControllerInterface
+    @inject(AppComponent.UserController) private readonly userController: ControllerInterface,
     @inject(AppComponent.ExceptionFilterInterface) private readonly exceptionFilter: ExceptionFilterInterface,
   ) {
     this.expressApplication = express();
@@ -50,7 +50,7 @@ export default class Application {
   private async _initController() {
     this.logger.info(`Controller ${LoggerInfoMessage.Init}`);
     // this.expressApplication.use('/offers', this.offerController.router);
-    // this.expressApplication.use('/users', this.userController.router);
+    this.expressApplication.use('/users', this.userController.router);
     this.logger.info(`Controller ${LoggerInfoMessage.InitDone}`);
   }
 

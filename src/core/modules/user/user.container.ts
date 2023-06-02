@@ -11,7 +11,7 @@ export function createUserContainer() {
   const container = new Container();
   container.bind<UserServiceInterface>(AppComponent.UserServiceInterface).to(UserService).inSingletonScope();
   container.bind<types.ModelType<UserEntity>>(AppComponent.UserModel).toConstantValue(UserModel);
-  container.bind<ControllerInterface>(AppComponent.UserController).toConstantValue(UserController);
+  container.bind<ControllerInterface>(AppComponent.UserController).to(UserController).inSingletonScope();
 
   return container;
 }
