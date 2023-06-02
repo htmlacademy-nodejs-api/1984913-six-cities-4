@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import { ControllerInterface } from '../../types/core/controller.interface';
 import { LoggerInterface } from '../../types/core/logger.interface';
 import { RouteInterface } from '../../types/router.interface';
-import { LoggerInfoMessage } from '../logger/logger.constants';
+import { LoggerInfoMessage } from '../logger/logger.constants.js';
 
 
 @injectable()

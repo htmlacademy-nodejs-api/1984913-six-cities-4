@@ -250,27 +250,27 @@ paths:
 
   /offers/premium:
     get:
-    tags:
-      - offers
-    summary: Получение списка  премиальных предложений #5.12
-    description: Возвращает список премиальных предложений (не более 3)
-    parameters:
-      - name: X-Token
-        in: header
-        description: Авторизационный токен пользователя
-        required: false
-        schema:
-          type: string
-          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
-    responses:
-      "200":
-        description: Список премиальных предложений
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/offersList"
+      tags:
+        - offers
+      summary: Получение списка  премиальных предложений #5.12
+      description: Возвращает список премиальных предложений (не более 3)
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+      responses:
+        "200":
+          description: Список премиальных предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offersList"
 
   /offers/favorite:
     get:

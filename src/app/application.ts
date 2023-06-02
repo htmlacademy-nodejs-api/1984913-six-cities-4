@@ -7,6 +7,8 @@ import { DatabaseClientInterface } from '../types/core/database-client.interface
 import { LoggerInterface } from '../types/core/logger.interface';
 import { inject, injectable } from 'inversify';
 import express, { Express } from 'express';
+// import { ControllerInterface } from '../types/core/controller.interface';
+import { ExceptionFilterInterface } from '../types/core/exception-filter.interface';
 @injectable()
 export default class Application {
   private expressApplication: Express;
@@ -14,13 +16,16 @@ export default class Application {
   constructor(
     @inject(AppComponent.LoggerInterface) private readonly logger: LoggerInterface,
     @inject(AppComponent.ConfigInterface) private readonly config: ConfigInterface<ConfigSchema>,
-    @inject(AppComponent.DatabaseClientInterface) private readonly databaseClient: DatabaseClientInterface
+    @inject(AppComponent.DatabaseClientInterface) private readonly databaseClient: DatabaseClientInterface,
+    // @inject(AppComponent.OfferController) private readonly offerController: ControllerInterface,
+    // @inject(AppComponent.UserController) private readonly userController: ControllerInterface
+    @inject(AppComponent.ExceptionFilterInterface) private readonly exceptionFilter: ExceptionFilterInterface,
   ) {
     this.expressApplication = express();
   }
 
   private async _initDb() {
-    this.logger.info(LoggerInfoMessage.InitDb);
+    this.logger.info(`Database ${LoggerInfoMessage.Init}`);
     const uri = getMongoURI(
       this.config.get('DB_USER'),
       this.config.get('DB_PASSWORD'),
@@ -29,11 +34,11 @@ export default class Application {
       this.config.get('DB_NAME')
     );
     await this.databaseClient.connect(uri);
-    this.logger.info(LoggerInfoMessage.InitDbDone);
+    this.logger.info(`Database ${LoggerInfoMessage.InitDone}`);
   }
 
   private async _initServer() {
-    this.logger.info(LoggerInfoMessage.InitServer);
+    this.logger.info(`Server ${LoggerInfoMessage.Init}`);
 
     const port = this.config.get('PORT');
     this.expressApplication.listen(port);
@@ -43,16 +48,30 @@ export default class Application {
   }
 
   private async _initController() {
-    this.logger.info(LoggerInfoMessage.InitController);
+    this.logger.info(`Controller ${LoggerInfoMessage.Init}`);
+    // this.expressApplication.use('/offers', this.offerController.router);
+    // this.expressApplication.use('/users', this.userController.router);
+    this.logger.info(`Controller ${LoggerInfoMessage.InitDone}`);
+  }
 
+  private async _initMiddleware() {
+    this.logger.info(`Global middleware ${LoggerInfoMessage.Init}`);
+    this.expressApplication.use(express.json());
+    this.logger.info(`Global middleware ${LoggerInfoMessage.InitDone}`);
+  }
 
-    this.logger.info(LoggerInfoMessage.InitControllerDone);
+  private async _initExceptionFilters() {
+    this.logger.info(`ExceptionFilters ${LoggerInfoMessage.Init}`);
+    this.expressApplication.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+    this.logger.info(`ExceptionFilters ${LoggerInfoMessage.InitDone}`);
   }
 
   public async init() {
-    this.logger.info(LoggerInfoMessage.InitApp);
+    this.logger.info(`Application ${LoggerInfoMessage.Init}`);
     await this._initDb();
-    await this._initServer();
+    await this._initMiddleware();
     await this._initController();
+    await this._initExceptionFilters();
+    await this._initServer();
   }
 }
