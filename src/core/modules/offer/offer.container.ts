@@ -11,7 +11,7 @@ export function createOfferContainer() {
   const container = new Container();
   container.bind<OfferServiceInterface>(AppComponent.OfferServiceInterface).to(OfferService).inSingletonScope();
   container.bind<types.ModelType<OfferEntity>>(AppComponent.OfferModel).toConstantValue(OfferModel);
-  container.bind<ControllerInterface>(AppComponent.OfferController).toConstantValue(OfferController);
+  container.bind<ControllerInterface>(AppComponent.OfferController).to(OfferController).inSingletonScope();
 
   return container;
 }

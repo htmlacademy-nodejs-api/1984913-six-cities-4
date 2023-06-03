@@ -14,6 +14,7 @@ import { ConfigSchema } from '../../config/config.schema.js';
 import UserRdo from './rdo/user.rdo.js';
 import { fillDTO } from '../../helpers/common.js';
 import LoginUserDto from './dto/login-user.dto.js';
+import { ControllerRoute } from '../../../utils/constants.js';
 
 
 @injectable()
@@ -27,10 +28,10 @@ export default class UserController extends Controller {
 
     this.logger.info(LoggerInfoMessage.RegisterRoute.concat('UserController'));
 
-    this.addRoute({path: '/login', method: HttpMethod.Get, handler: this.check});
-    this.addRoute({path: '/login', method: HttpMethod.Post, handler: this.login});
-    this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
-    this.addRoute({path: '/logout', method: HttpMethod.Delete, handler: this.logout});
+    this.addRoute({path: ControllerRoute.Login, method: HttpMethod.Get, handler: this.check});
+    this.addRoute({path: ControllerRoute.Login, method: HttpMethod.Post, handler: this.login});
+    this.addRoute({path: ControllerRoute.Register, method: HttpMethod.Post, handler: this.create});
+    this.addRoute({path: ControllerRoute.Logout, method: HttpMethod.Delete, handler: this.logout});
   }
 
   public async create(

@@ -33,3 +33,16 @@ export const ChunkSize = {
 };
 
 export const SORT_TYPE_DOWN = -1;
+
+export const ControllerRoute = {
+  Main:'/',
+  OffersList:'/offers',
+  Offer:'/:offerId',
+  Premium:'/premium',
+  Favorite:'/favorite',
+  User: '/users',
+  Register:'/register',
+  Login:'/login',
+  Logout:'/logout',
+  Comment: '/comments'
+};
