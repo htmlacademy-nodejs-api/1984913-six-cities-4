@@ -5,3 +5,7 @@ export type RequestQuery = {
 export type RequestQueryPremium = {
   city?: string;
 }
+
+export type RequestQueryStatus = {
+  status?: string;
+}

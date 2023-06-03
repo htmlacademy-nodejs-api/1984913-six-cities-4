@@ -331,10 +331,10 @@ paths:
             example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
         - name: status
           in: query
-          description: Статус "избранное" 1 - добавляет в избранное, 0 - удаляет из избранного.
+          description: Статус "избранное" true - добавляет в избранное, false - удаляет из избранного.
           required: true
           schema:
-            type: boolean
+            type: string
             example: true
       responses:
         "200":

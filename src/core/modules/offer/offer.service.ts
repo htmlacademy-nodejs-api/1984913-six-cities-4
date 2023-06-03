@@ -55,9 +55,8 @@ export default class OfferService implements OfferServiceInterface {
   }
 
   public async updateFavoriteStatus(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    const offer = this.offerModel.findById(offerId);
-    return this.offerModel
-      .findByIdAndUpdate(offerId, { isFavorite: !offer?.isFavorite }, { new: true }).populate(['userId', 'locationId']).exec();
+    const offer = await this.offerModel.findById(offerId);
+    return this.offerModel.findByIdAndUpdate(offerId, { isFavorite: !offer?.isFavorite }, { new: true }).populate(['userId', 'locationId']).exec();
   }
 
   public async updateCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
