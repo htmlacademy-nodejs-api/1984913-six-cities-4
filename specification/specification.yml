@@ -250,27 +250,27 @@ paths:
 
   /offers/premium:
     get:
-    tags:
-      - offers
-    summary: Получение списка  премиальных предложений #5.12
-    description: Возвращает список премиальных предложений (не более 3)
-    parameters:
-      - name: X-Token
-        in: header
-        description: Авторизационный токен пользователя
-        required: false
-        schema:
-          type: string
-          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
-    responses:
-      "200":
-        description: Список премиальных предложений
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/offersList"
+      tags:
+        - offers
+      summary: Получение списка  премиальных предложений #5.12
+      description: Возвращает список премиальных предложений (не более 3)
+      parameters:
+        - name: X-Token
+          in: header
+          description: Авторизационный токен пользователя
+          required: false
+          schema:
+            type: string
+            example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+      responses:
+        "200":
+          description: Список премиальных предложений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offersList"
 
   /offers/favorite:
     get:
@@ -331,10 +331,10 @@ paths:
             example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
         - name: status
           in: query
-          description: Статус "избранное" 1 - добавляет в избранное, 0 - удаляет из избранного.
+          description: Статус "избранное" true - добавляет в избранное, false - удаляет из избранного.
           required: true
           schema:
-            type: boolean
+            type: string
             example: true
       responses:
         "200":
@@ -471,6 +471,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/user"
+        "400":
+          description: Не удалось зарегистрировать пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestErrorMessage"
 
         "409":
           description: Пользователь с таким email уже существует.
@@ -490,7 +496,7 @@ paths:
         required: true
 
       responses:
-        "201":
+        "200":
           description: Успешная авторизация.
           content:
             application/json:

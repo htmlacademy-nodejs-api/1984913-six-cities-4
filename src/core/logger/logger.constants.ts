@@ -1,12 +1,15 @@
 export const LoggerInfoMessage = {
-  InitApp: 'Application initialization...',
+  Init: 'initialization...',
   Config: '.env file found and successfully parsed.',
   DbConnect:'Database connection established.',
   DbConnectInProgress:'Trying to connect to MongoDB...',
   DbDisconnect:'Database connection closed.',
-  InitDb:'Init database...',
-  InitDbDone:'Init database completed',
+  InitDone:'initialization completed.',
+  InitServerDone:'Server started on ',
   NewData:'New data created: ',
+  NewRoute:'Route registered: ',
+  RegisterRoute:'Register routes for ',
+  RegisterFilter:'Register ExceptionFilter',
 }as const;
 
 export const LoggerErrorMessage = {
