@@ -10,18 +10,13 @@ import { fillDTO } from '../../helpers/common.js';
 import OfferMinRdo from './rdo/offer-min.rdo.js';
 import CreateOfferDto from './dto/create-offer.js';
 import OfferFullRdo from './rdo/offer-full.rdo.js';
-import { ParamsDictionary } from 'express-serve-static-core';
 import HttpError from '../../errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import UpdateOfferDto from './dto/update-offer.js';
 import { ControllerRoute } from '../../../utils/constants.js';
-import { RequestQuery, RequestQueryPremium, RequestQueryStatus } from '../../../types/request-query.type.js';
-
-type ParamsOfferDetails = {
-  offerId: string;
-} | ParamsDictionary
-
-type UnknownRecord = Record<string, unknown>
+import { RequestQueryLimit, RequestQueryPremium, RequestQueryStatus } from '../../../types/request-query.type.js';
+import { UnknownRecord } from '../../../types/unknown-record.type.js';
+import { ParamsOfferDetails } from '../../../types/params-details.type.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -43,7 +38,7 @@ export default class OfferController extends Controller {
     this.addRoute({ path: ControllerRoute.Offer, method: HttpMethod.Delete, handler: this.delete });
   }
 
-  public async index({query}: Request<UnknownRecord, UnknownRecord, UnknownRecord,RequestQuery>, res: Response): Promise<void> {
+  public async index({query}: Request<UnknownRecord, UnknownRecord, UnknownRecord,RequestQueryLimit>, res: Response): Promise<void> {
     const offers = await this.offerService.find(query.limit);
     const offersToResponse = fillDTO(OfferMinRdo, offers);
     this.ok(res, offersToResponse);

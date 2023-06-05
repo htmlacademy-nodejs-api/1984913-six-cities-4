@@ -15,6 +15,7 @@ import UserRdo from './rdo/user.rdo.js';
 import { fillDTO } from '../../helpers/common.js';
 import LoginUserDto from './dto/login-user.dto.js';
 import { ControllerRoute } from '../../../utils/constants.js';
+import { UnknownRecord } from '../../../types/unknown-record.type.js';
 
 
 @injectable()
@@ -35,7 +36,7 @@ export default class UserController extends Controller {
   }
 
   public async create(
-    {body}: Request<Record<string, unknown>, Record<string, unknown>, CreateUserDto>,
+    {body}: Request<UnknownRecord, UnknownRecord, CreateUserDto>,
     res: Response,
     _next: NextFunction
   ): Promise<void> {
@@ -54,7 +55,7 @@ export default class UserController extends Controller {
   }
 
   public async login(
-    {body}: Request<Record<string, unknown>, Record<string, unknown>, LoginUserDto>,
+    {body}: Request<UnknownRecord, UnknownRecord, LoginUserDto>,
     _res: Response,
   ): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
