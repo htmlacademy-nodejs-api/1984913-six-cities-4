@@ -9,6 +9,7 @@ import { LoggerInfoMessage } from '../../logger/logger.constants.js';
 import { DEFAULT_OFFERS_AMOUNT, OfferRating, PREMIUM_OFFERS_AMOUNT } from './offer.constants.js';
 import UpdateOfferDto from './dto/update-offer.js';
 import { SORT_TYPE_DOWN } from '../../../utils/constants.js';
+import { Types } from 'mongoose';
 
 @injectable()
 export default class OfferService implements OfferServiceInterface {
@@ -25,7 +26,7 @@ export default class OfferService implements OfferServiceInterface {
   }
 
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
-    const currentRating = await this.countRating();
+    const currentRating = await this.countRating(offerId);
     return this.offerModel
       .findByIdAndUpdate(offerId, {...dto, rating:currentRating }, { new: true })
       .populate(['userId', 'locationId']).exec();
@@ -60,38 +61,38 @@ export default class OfferService implements OfferServiceInterface {
   }
 
   public async updateCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    const currentRating = await this.countRating();
+    const currentRating = await this.countRating(offerId);
     return this.offerModel
       .findByIdAndUpdate(offerId, {
         '$inc': {
           commentCount: 1,
         },
-        'set':{
+        '$set':{
           rating:currentRating
         },
       }).exec();
   }
 
-  public async countRating(): Promise<number | null > {
+  public async countRating(offerId:string): Promise<number | null > {
+    const currentId = new Types.ObjectId(offerId);
     const currentOfferWithRating = await this.offerModel
       .aggregate([
+        { $match: { _id: currentId }},
         {
           $lookup: {
             from: 'comments',
-            let:{offerId:'$_id'},
             pipeline: [
-              {$match:{ $expr: {$in: ['$$offerId','$offerId']}}},
+              {$match: { offerId:currentId } },
               {$project: { rating: 1}},
-              {$group:{_id:null, averageRating:{$avg:'rating'}}}
             ],
             as:'result'
           },
         },
         { $unwind: '$result' },
-        { $addFields: { rating: '$result.averageRating' }},
+        {$group:{_id:null, averageRating:{$avg:'$result.rating'}}},
         { $unset: 'result' },
       ]);
-    return currentOfferWithRating[0] ? currentOfferWithRating[0].rating : OfferRating.Min;
+    return currentOfferWithRating[0] ? currentOfferWithRating[0].averageRating : OfferRating.Min;
   }
 
   public async exists(documentId: string): Promise<boolean> {
