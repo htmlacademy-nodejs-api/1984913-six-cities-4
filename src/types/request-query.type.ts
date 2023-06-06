@@ -1,4 +1,4 @@
-export type RequestQuery = {
+export type RequestQueryLimit = {
   limit?: number;
 }
 

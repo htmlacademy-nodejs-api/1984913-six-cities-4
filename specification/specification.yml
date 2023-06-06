@@ -679,9 +679,6 @@ components:
         text:
           type: string
           example: Текст комментария.
-        postDate:
-          type: string
-          example: 2023-05-27T17:30:00Z
         rating:
           type: number
           example: 1
