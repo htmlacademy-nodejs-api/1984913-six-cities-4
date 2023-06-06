@@ -92,7 +92,7 @@ export default class OfferService implements OfferServiceInterface {
         {$group:{_id:null, averageRating:{$avg:'$result.rating'}}},
         { $unset: 'result' },
       ]);
-    return currentOfferWithRating[0] ? currentOfferWithRating[0].averageRating : OfferRating.Min;
+    return currentOfferWithRating[0] ? currentOfferWithRating[0].averageRating.toFixed(OfferRating.Decimals) : OfferRating.Min;
   }
 
   public async exists(documentId: string): Promise<boolean> {

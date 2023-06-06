@@ -16,6 +16,7 @@ import { OfferServiceInterface } from '../offer/offer-service.interface.js';
 import HttpError from '../../errors/http-error.js';
 import { ParamsOfferDetails } from '../../../types/params-details.type.js';
 import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.middleware.js';
+import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
 
 @injectable()
 export default class CommentController extends Controller {
@@ -37,7 +38,10 @@ export default class CommentController extends Controller {
       path: ControllerRoute.Offer,
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateDTOMiddleware(CreateCommentDTO),
+      ],
     });
     this.addRoute({
       path: ControllerRoute.Offer,

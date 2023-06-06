@@ -22,6 +22,7 @@ import {
 import { UnknownRecord } from '../../../types/unknown-record.type.js';
 import { ParamsOfferDetails } from '../../../types/params-details.type.js';
 import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.middleware.js';
+import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -44,6 +45,9 @@ export default class OfferController extends Controller {
       path: ControllerRoute.Main,
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [
+        new ValidateDTOMiddleware(CreateOfferDto),
+      ],
     });
     this.addRoute({
       path: ControllerRoute.Premium,
@@ -71,7 +75,10 @@ export default class OfferController extends Controller {
       path: ControllerRoute.Offer,
       method: HttpMethod.Patch,
       handler: this.update,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateDTOMiddleware(UpdateOfferDto),
+      ],
     });
     this.addRoute({
       path: ControllerRoute.Offer,
