@@ -46,3 +46,15 @@ export const ControllerRoute = {
   Logout:'/logout',
   Comment: '/comments'
 };
+
+export const CommandName = {
+  Help:'--help',
+  Generate:'--generate',
+  Import:'--import',
+  Version:'--version'
+};
+
+export const MiddlewareName = {
+  DocumentExists:'DocumentExistsMiddleware',
+  ValidateObjectId:'ValidateObjectIdMiddleware',
+} as const;

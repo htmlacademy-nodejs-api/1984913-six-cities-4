@@ -20,7 +20,7 @@ Content-Type: application/json
     ],
     "isPremium": true,
     "isFavorite": true,
-    "rating": 5,
+    "rating": 1,
     "type": "room",
     "rooms": 4,
     "guests": 6,
@@ -28,8 +28,7 @@ Content-Type: application/json
     "goods": ["Washer"],
     "userId":  "647a1975408c116759573b98",
     "locationId":  "6479c678fbdb82ec7e0bdeef",
-    "commentCount": 2
-
+    "commentCount": 0
   }
 
 ###

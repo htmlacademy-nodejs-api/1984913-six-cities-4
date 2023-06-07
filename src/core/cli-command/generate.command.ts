@@ -1,13 +1,13 @@
 import got from 'got';
 import { MockData } from '../../types/mock-data.type.js';
-import { ErrorMessage, InfoMessage } from '../../utils/constants.js';
+import { CommandName, ErrorMessage, InfoMessage } from '../../utils/constants.js';
 import OfferGenerator from '../modules/offer-generator/offer-generator.js';
 import { CliCommandInterface } from '../../types/core/cli-command.interface.js';
 import TSVFileWriter from '../file-reader/tsv-file-writer.js';
 import chalk from 'chalk';
 
 export default class GenerateCommand implements CliCommandInterface {
-  public readonly name = '--generate';
+  public readonly name = CommandName.Generate;
   private initialData!: MockData;
 
   public async execute(...parameters:string[]): Promise<void> {

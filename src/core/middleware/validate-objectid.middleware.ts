@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import HttpError from '../errors/http-error.js';
 import { MiddlewareInterface } from '../../types/core/middleware.interface.js';
+import { MiddlewareName } from '../../utils/constants.js';
 
 const { Types } = mongoose;
 
@@ -19,7 +20,7 @@ export class ValidateObjectIdMiddleware implements MiddlewareInterface {
     throw new HttpError(
       StatusCodes.BAD_REQUEST,
       `${objectId} is invalid ObjectID`,
-      'ValidateObjectIdMiddleware'
+      MiddlewareName.ValidateObjectId
     );
   }
 }

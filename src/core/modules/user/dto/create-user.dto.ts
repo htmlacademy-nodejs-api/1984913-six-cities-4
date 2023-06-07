@@ -16,7 +16,7 @@ export default class CreateUserDto {
   @IsEnum(UserStatus, {
     message: `type must be one of ${Object.values(UserStatus).join(', ')}`,
   })
-  public userStatus!: UserStatus;
+  public userStatus!: string;
 
   @IsString({ message: 'password is required' })
   @Length(UserPasswordLength.Min, UserPasswordLength.Max, {

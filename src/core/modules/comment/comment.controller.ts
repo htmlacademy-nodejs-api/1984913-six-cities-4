@@ -11,12 +11,11 @@ import { UnknownRecord } from '../../../types/unknown-record.type.js';
 import { Request, Response } from 'express';
 import CommentRdo from './rdo/comment.rdo.js';
 import { fillDTO } from '../../helpers/common.js';
-import { StatusCodes } from 'http-status-codes';
 import { OfferServiceInterface } from '../offer/offer-service.interface.js';
-import HttpError from '../../errors/http-error.js';
 import { ParamsOfferDetails } from '../../../types/params-details.type.js';
 import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.middleware.js';
 import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
+import { DocumentExistsMiddleware } from '../../middleware/document-exists.middleware.js';
 
 @injectable()
 export default class CommentController extends Controller {
@@ -41,13 +40,17 @@ export default class CommentController extends Controller {
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDTOMiddleware(CreateCommentDTO),
+        new DocumentExistsMiddleware(this.offerService, 'offer', 'offerId'),
       ],
     });
     this.addRoute({
       path: ControllerRoute.Offer,
       method: HttpMethod.Get,
       handler: this.index,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'offer', 'offerId'),
+      ],
     });
   }
 
@@ -56,16 +59,6 @@ export default class CommentController extends Controller {
     res: Response
   ): Promise<void> {
     const offerId = params.offerId || '';
-    const existsOffer = await this.offerService.exists(offerId);
-
-    if (!existsOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id "${params.offerId}" not found.`,
-        'CommentController'
-      );
-    }
-
     const result = await this.commentService.findByOfferId(offerId);
     this.created(res, fillDTO(CommentRdo, result));
   }
@@ -78,16 +71,6 @@ export default class CommentController extends Controller {
     res: Response
   ): Promise<void> {
     const offerId = params.offerId || '';
-
-    const existsOffer = await this.offerService.exists(offerId);
-
-    if (!existsOffer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id "${params.offerId}" not found.`,
-        'CommentController'
-      );
-    }
     const result = await this.commentService.create({ ...body, offerId });
     await this.offerService.updateCommentCount(offerId);
     this.created(res, fillDTO(CommentRdo, result));
