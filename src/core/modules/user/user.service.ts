@@ -7,6 +7,7 @@ import { LoggerInterface } from '../../../types/core/logger.interface.js';
 import { AppComponent } from '../../../types/app-component.enum.js';
 import { LoggerInfoMessage } from '../../logger/logger.constants.js';
 import UpdateUserDto from './dto/update-user.dto.js';
+import { EntityName } from '../../../utils/constants.js';
 
 @injectable()
 export default class UserService implements UserServiceInterface {
@@ -20,7 +21,7 @@ export default class UserService implements UserServiceInterface {
     user.setPassword(dto.password, salt);
 
     const result = await this.userModel.create(user);
-    this.logger.info(LoggerInfoMessage.NewData.concat('user'));
+    this.logger.info(LoggerInfoMessage.NewData.concat(EntityName.User));
 
     return result;
   }

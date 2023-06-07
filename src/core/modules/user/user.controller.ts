@@ -10,16 +10,19 @@ import CreateUserDto from './dto/create-user.dto.js';
 import HttpError from '../../errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import { ConfigInterface } from '../../../types/core/config.interface.js';
-import { ConfigSchema } from '../../config/config.schema.js';
 import UserRdo from './rdo/user.rdo.js';
 import { fillDTO } from '../../helpers/common.js';
 import LoginUserDto from './dto/login-user.dto.js';
-import { ControllerRoute } from '../../../utils/constants.js';
+import { ControllerRoute, ObjectIdParam } from '../../../utils/constants.js';
 import { UnknownRecord } from '../../../types/unknown-record.type.js';
 import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
+import { ConfigSchema } from '../../../types/core/config-schema.type.js';
+import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.middleware.js';
+import { UploadFileMiddleware } from '../../middleware/upload-file.middleware.js';
 
 @injectable()
 export default class UserController extends Controller {
+  private readonly name = AppComponent.UserController.description;
   constructor(
     @inject(AppComponent.LoggerInterface)
     protected readonly logger: LoggerInterface,
@@ -54,6 +57,15 @@ export default class UserController extends Controller {
       method: HttpMethod.Delete,
       handler: this.logout,
     });
+    this.addRoute({
+      path: ControllerRoute.User.concat(ControllerRoute.Avatar),
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectIdMiddleware(ObjectIdParam.UserId),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
+      ]
+    });
   }
 
   public async create(
@@ -67,7 +79,7 @@ export default class UserController extends Controller {
       throw new HttpError(
         StatusCodes.CONFLICT,
         `User with email "${body.email}" exists.`,
-        'UserController'
+        this.name
       );
     }
 
@@ -88,14 +100,14 @@ export default class UserController extends Controller {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
         `User with email "${body.email}" not found`,
-        'UserController'
+        this.name
       );
     }
 
     throw new HttpError(
       StatusCodes.NOT_IMPLEMENTED,
       'Not implemented',
-      'UserController'
+      this.name
     );
   }
 
@@ -104,7 +116,11 @@ export default class UserController extends Controller {
     this.ok(res, fillDTO(UserRdo, user));
   }
 
+  public async uploadAvatar(req: Request, res: Response) {
+    this.created(res, {filepath: req.file?.path});
+  }
+
   public async logout() {
-    throw new HttpError(StatusCodes.NO_CONTENT, 'No content', 'UserController');
+    throw new HttpError(StatusCodes.NO_CONTENT, 'No content', this.name);
   }
 }

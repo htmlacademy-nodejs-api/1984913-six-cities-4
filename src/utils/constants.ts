@@ -40,7 +40,9 @@ export const ControllerRoute = {
   Offer:'/:offerId',
   Premium:'/premium',
   Favorite:'/favorite',
-  User: '/users',
+  UsersList: '/users',
+  User:'/:userId',
+  Avatar: '/avatar',
   Register:'/register',
   Login:'/login',
   Logout:'/logout',
@@ -58,3 +60,14 @@ export const MiddlewareName = {
   DocumentExists:'DocumentExistsMiddleware',
   ValidateObjectId:'ValidateObjectIdMiddleware',
 } as const;
+
+export const ObjectIdParam = {
+  UserId:'userId',
+  OfferId:'offerId',
+} as const;
+
+export const EntityName = {
+  User:'User',
+  Offer:'Offer',
+} as const;
+

@@ -3,7 +3,7 @@ import { AppComponent } from '../../../types/app-component.enum.js';
 import { LoggerInterface } from '../../../types/core/logger.interface.js';
 import { CommentServiceInterface } from './comment-service.interface.js';
 import { LoggerInfoMessage } from '../../logger/logger.constants.js';
-import { ControllerRoute } from '../../../utils/constants.js';
+import { ControllerRoute, EntityName, ObjectIdParam } from '../../../utils/constants.js';
 import { HttpMethod } from '../../../types/http-method.enum.js';
 import { Controller } from '../../controller/controller.abstract.js';
 import CreateCommentDTO from './dto/create-comment.dto.js';
@@ -38,9 +38,9 @@ export default class CommentController extends Controller {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
         new ValidateDTOMiddleware(CreateCommentDTO),
-        new DocumentExistsMiddleware(this.offerService, 'offer', 'offerId'),
+        new DocumentExistsMiddleware(this.offerService, EntityName.Offer, ObjectIdParam.OfferId),
       ],
     });
     this.addRoute({
@@ -48,8 +48,8 @@ export default class CommentController extends Controller {
       method: HttpMethod.Get,
       handler: this.index,
       middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'offer', 'offerId'),
+        new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
+        new DocumentExistsMiddleware(this.offerService, EntityName.Offer, ObjectIdParam.OfferId),
       ],
     });
   }

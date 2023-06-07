@@ -1,17 +1,8 @@
 import convict from 'convict';
 import validator from 'convict-format-with-validator';
+import { ConfigSchema } from '../../types/core/config-schema.type';
 
 convict.addFormats(validator);
-
-export type ConfigSchema = {
-  PORT: number;
-  SALT:string;
-  DB_HOST: string;
-  DB_USER: string;
-  DB_PASSWORD: string;
-  DB_PORT: string;
-  DB_NAME: string;
-}
 
 export const configSchema = convict<ConfigSchema>({
   PORT: {
@@ -55,5 +46,11 @@ export const configSchema = convict<ConfigSchema>({
     format: String,
     env: 'DB_NAME',
     default: 'six-cities'
+  },
+  UPLOAD_DIRECTORY: {
+    doc: 'Directory for uploaded files',
+    format: String,
+    env: 'UPLOAD_DIRECTORY',
+    default: null
   }
 });

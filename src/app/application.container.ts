@@ -1,7 +1,6 @@
 import { Container } from 'inversify';
 import { LoggerInterface } from '../types/core/logger.interface.js';
 import { ConfigInterface } from '../types/core/config.interface.js';
-import { ConfigSchema } from '../core/config/config.schema.js';
 import PinoService from '../core/logger/pino.service.js';
 import ConfigService from '../core/config/config.service.js';
 import { DatabaseClientInterface } from '../types/core/database-client.interface.js';
@@ -10,6 +9,7 @@ import Application from './application.js';
 import { AppComponent } from '../types/app-component.enum.js';
 import { ExceptionFilterInterface } from '../types/core/exception-filter.interface.js';
 import ExceptionFilter from '../core/exception-filters/exception-filter.js';
+import { ConfigSchema } from '../types/core/config-schema.type.js';
 
 export function createApplicationContainer(){
   const container = new Container();
