@@ -14,9 +14,13 @@ export class UploadFileMiddleware implements MiddlewareInterface {
     const storage = diskStorage({
       destination: this.uploadDirectory,
       filename: (_req, file, callback) => {
+        let error:Error|null = null;
         const fileExtentions = extension(file.mimetype);
+        if(!fileExtentions){
+          error = new Error ('Wrong file mimetype');
+        }
         const filename = nanoid();
-        callback(null, `${filename}.${fileExtentions}`);
+        callback(error, `${filename}.${fileExtentions}`);
       }
     });
 
