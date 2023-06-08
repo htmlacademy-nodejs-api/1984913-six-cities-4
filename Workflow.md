@@ -117,6 +117,8 @@ npm run ts ./src/main.cli.ts -- --generate 10 ./mocks/test-data.tsv
 http://localhost:3123/api
 ```
 
+> Перед запуском команды необходимо запустить сервер с моковыми данными
+
 - Параметр `n` задаёт количество генерируемых предложений.
 
 - Параметр `filepath` указывает путь для сохранения файла с предложениями.
@@ -158,7 +160,9 @@ npm run ts ./src/main.cli.ts -- --import ./mocks/mock-data.tsv admin test localh
 
 - `DB_PORT=27017` - порт сервера базы данных;
 
-- `DB_NAME='six-cities'` - название базы данных.
+- `DB_NAME=six-cities` - название базы данных;
+
+- `UPLOAD_DIRECTORY=upload` - название директории для загружаемых файлов.
 
 ### Остальное
 

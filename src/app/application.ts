@@ -1,4 +1,3 @@
-import { ConfigSchema } from '../core/config/config.schema';
 import { getMongoURI } from '../core/helpers/db.js';
 import { LoggerInfoMessage } from '../core/logger/logger.constants.js';
 import { AppComponent } from '../types/app-component.enum.js';
@@ -10,6 +9,7 @@ import express, { Express } from 'express';
 import { ControllerInterface } from '../types/core/controller.interface';
 import { ExceptionFilterInterface } from '../types/core/exception-filter.interface';
 import { ControllerRoute } from '../utils/constants.js';
+import { ConfigSchema } from '../types/core/config-schema.type.js';
 @injectable()
 export default class Application {
   private expressApplication: Express;
@@ -52,7 +52,7 @@ export default class Application {
   private async _initController() {
     this.logger.info(`Controller ${LoggerInfoMessage.Init}`);
     this.expressApplication.use(ControllerRoute.OffersList, this.offerController.router);
-    this.expressApplication.use(ControllerRoute.User, this.userController.router);
+    this.expressApplication.use(ControllerRoute.UsersList, this.userController.router);
     this.expressApplication.use(ControllerRoute.Comment, this.commentController.router);
     this.logger.info(`Controller ${LoggerInfoMessage.InitDone}`);
   }
@@ -60,6 +60,10 @@ export default class Application {
   private async _initMiddleware() {
     this.logger.info(`Global middleware ${LoggerInfoMessage.Init}`);
     this.expressApplication.use(express.json());
+    this.expressApplication.use(
+      '/upload',
+      express.static(this.config.get('UPLOAD_DIRECTORY'))
+    );
     this.logger.info(`Global middleware ${LoggerInfoMessage.InitDone}`);
   }
 

@@ -2,10 +2,11 @@ import { ConfigInterface } from '../../types/core/config.interface.js';
 import { LoggerInterface } from '../../types/core/logger.interface.js';
 import { config } from 'dotenv';
 import { ErrorMessage } from '../../utils/constants.js';
-import { ConfigSchema, configSchema } from './config.schema.js';
+import { configSchema } from './config.schema.js';
 import { inject, injectable } from 'inversify';
 import { AppComponent } from '../../types/app-component.enum.js';
 import { LoggerInfoMessage } from '../logger/logger.constants.js';
+import { ConfigSchema } from '../../types/core/config-schema.type.js';
 
 @injectable()
 export default class ConfigService implements ConfigInterface<ConfigSchema> {

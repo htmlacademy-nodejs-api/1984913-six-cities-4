@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { CliCommandInterface } from '../../types/core/cli-command.interface.js';
-import { DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD, ErrorMessage, InfoMessage } from '../../utils/constants.js';
+import { CommandName, DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD, ErrorMessage, InfoMessage } from '../../utils/constants.js';
 import TSVFileReader from '../file-reader/tsv-file-reader.js';
 import { createOffer, getErrorMessage, getMongoURI } from '../helpers/index.js';
 import { LoggerInterface } from '../../types/core/logger.interface.js';
@@ -20,7 +20,7 @@ import { OfferType } from '../../types/offer.type.js';
 
 
 export default class ImportCommand implements CliCommandInterface{
-  public readonly name = '--import';
+  public readonly name = CommandName.Import;
 
   private logger:LoggerInterface;
   private userService!:UserServiceInterface;
