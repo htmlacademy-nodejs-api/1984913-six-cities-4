@@ -162,7 +162,9 @@ npm run ts ./src/main.cli.ts -- --import ./mocks/mock-data.tsv admin test localh
 
 - `DB_NAME=six-cities` - название базы данных;
 
-- `UPLOAD_DIRECTORY=upload` - название директории для загружаемых файлов.
+- `UPLOAD_DIRECTORY=upload` - название директории для загружаемых файлов;
+
+- `JWT_SECRET=secret` - строка, которая будет использоваться в процессе шифрования.
 
 ### Остальное
 

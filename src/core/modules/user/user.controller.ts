@@ -11,7 +11,7 @@ import HttpError from '../../errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import { ConfigInterface } from '../../../types/core/config.interface.js';
 import UserRdo from './rdo/user.rdo.js';
-import { fillDTO } from '../../helpers/common.js';
+import { createJWT, fillDTO } from '../../helpers/common.js';
 import LoginUserDto from './dto/login-user.dto.js';
 import { ControllerRoute, ObjectIdParam } from '../../../utils/constants.js';
 import { UnknownRecord } from '../../../types/unknown-record.type.js';
@@ -19,6 +19,8 @@ import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.
 import { ConfigSchema } from '../../../types/core/config-schema.type.js';
 import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.middleware.js';
 import { UploadFileMiddleware } from '../../middleware/upload-file.middleware.js';
+import LoggedUserRdo from './rdo/logged-user.rdo.js';
+import { JWT_ALGORITHM } from './user.constants.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -92,23 +94,28 @@ export default class UserController extends Controller {
 
   public async login(
     { body }: Request<UnknownRecord, UnknownRecord, LoginUserDto>,
-    _res: Response
+    res: Response
   ): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
+    const user = await this.userService.verifyUser(body, this.configService.get('SALT'));
 
-    if (!existsUser) {
+    if (!user) {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
-        `User with email "${body.email}" not found`,
+        'User unauthorized',
         this.name
       );
     }
-
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      this.name
+    const token = await createJWT(JWT_ALGORITHM, this.configService.get('JWT_SECRET'),
+      {
+        email: user.email,
+        id: user.id
+      }
     );
+
+    this.ok(res, fillDTO(LoggedUserRdo, {
+      email: user.email,
+      token
+    }));
   }
 
   public async check({ body }: Request, res: Response): Promise<void> {

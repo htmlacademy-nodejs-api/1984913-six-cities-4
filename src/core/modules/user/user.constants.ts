@@ -12,3 +12,5 @@ export enum UserStatus{
   Regular='regular',
   Pro='pro'
 }
+
+export const JWT_ALGORITHM = 'HS256';

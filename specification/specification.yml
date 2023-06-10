@@ -537,7 +537,7 @@ paths:
                 $ref: "#/components/schemas/NotAuthorizedErrorMessage"
 
   /users/logout:
-    delete:
+    post:
       tags:
         - users
       summary: Завершение пользовательского сеанса #5.10
