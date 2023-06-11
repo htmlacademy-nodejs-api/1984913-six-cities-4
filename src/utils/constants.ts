@@ -20,7 +20,9 @@ export const ErrorMessage = {
   DbConnectFail:'Failed to connect to the database.',
   DbDisconnect:'Not connected to the database',
   Unauthorized:'Unauthorized',
-  InvalidToken:'Invalid token'
+  InvalidToken:'Invalid token',
+  Undefined:'User undefined',
+  NoStatus: 'There is no status query (true or false)'
 }as const;
 
 export const InfoMessage = {
@@ -47,7 +49,6 @@ export const ControllerRoute = {
   Avatar: '/avatar',
   Register:'/register',
   Login:'/login',
-  Logout:'/logout',
   Comment: '/comments'
 };
 

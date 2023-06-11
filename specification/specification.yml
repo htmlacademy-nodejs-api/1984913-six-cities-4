@@ -536,24 +536,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/NotAuthorizedErrorMessage"
 
-  /users/logout:
-    post:
-      tags:
-        - users
-      summary: Завершение пользовательского сеанса #5.10
-      description: Завершает сеанс работы — выход из закрытой части приложения.
-
-      responses:
-        "204":
-          description: Успешное завершение сеанса.
-
-        "400":
-          description: Не удалось завершить сеанс.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BadRequestErrorMessage"
-
 components:
   schemas:
     editOffer:

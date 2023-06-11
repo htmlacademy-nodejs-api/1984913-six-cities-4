@@ -13,7 +13,7 @@ import { ConfigInterface } from '../../../types/core/config.interface.js';
 import UserRdo from './rdo/user.rdo.js';
 import { createJWT, fillDTO } from '../../helpers/common.js';
 import LoginUserDto from './dto/login-user.dto.js';
-import { ControllerRoute, ObjectIdParam } from '../../../utils/constants.js';
+import { ControllerRoute, ErrorMessage, ObjectIdParam } from '../../../utils/constants.js';
 import { UnknownRecord } from '../../../types/unknown-record.type.js';
 import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
 import { ConfigSchema } from '../../../types/core/config-schema.type.js';
@@ -53,11 +53,6 @@ export default class UserController extends Controller {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [new ValidateDTOMiddleware(CreateUserDto)],
-    });
-    this.addRoute({
-      path: ControllerRoute.Logout,
-      method: HttpMethod.Delete,
-      handler: this.logout,
     });
     this.addRoute({
       path: ControllerRoute.User.concat(ControllerRoute.Avatar),
@@ -101,7 +96,7 @@ export default class UserController extends Controller {
     if (!user) {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
-        'User unauthorized',
+        ErrorMessage.Unauthorized,
         this.name
       );
     }
@@ -118,16 +113,24 @@ export default class UserController extends Controller {
     }));
   }
 
-  public async check({ body }: Request, res: Response): Promise<void> {
-    const user = await this.userService.findByEmail(body.email);
-    this.ok(res, fillDTO(UserRdo, user));
+  public async check({ user }: Request, res: Response): Promise<void> {
+    if (!user) {
+      throw new Error(ErrorMessage.Undefined);
+    }
+    const {email} = user;
+    const currentUser = await this.userService.findByEmail(email);
+    if (!currentUser) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        ErrorMessage.Unauthorized,
+        this.name
+      );
+    }
+    this.ok(res, fillDTO(UserRdo, currentUser));
   }
 
   public async uploadAvatar(req: Request, res: Response) {
     this.created(res, {filepath: req.file?.path});
   }
 
-  public async logout() {
-    throw new HttpError(StatusCodes.NO_CONTENT, 'No content', this.name);
-  }
 }

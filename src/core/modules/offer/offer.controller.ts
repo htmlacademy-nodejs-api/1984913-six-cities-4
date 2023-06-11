@@ -13,7 +13,7 @@ import OfferFullRdo from './rdo/offer-full.rdo.js';
 import HttpError from '../../errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import UpdateOfferDto from './dto/update-offer.js';
-import { ControllerRoute, EntityName, ObjectIdParam } from '../../../utils/constants.js';
+import { ControllerRoute, EntityName, ErrorMessage, ObjectIdParam } from '../../../utils/constants.js';
 import { RequestQueryLimit, RequestQueryPremium, RequestQueryStatus,} from '../../../types/request-query.type.js';
 import { UnknownRecord } from '../../../types/unknown-record.type.js';
 import { ParamsOfferDetails } from '../../../types/params-details.type.js';
@@ -206,7 +206,7 @@ export default class OfferController extends Controller {
     if (!status) {
       throw new HttpError(
         StatusCodes.BAD_REQUEST,
-        'There is no status query (true or false)',
+        ErrorMessage.NoStatus,
         this.name
       );
     }
