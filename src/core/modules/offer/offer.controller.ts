@@ -20,6 +20,7 @@ import { ParamsOfferDetails } from '../../../types/params-details.type.js';
 import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.middleware.js';
 import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
 import { DocumentExistsMiddleware } from '../../middleware/document-exists.middleware.js';
+import { PrivateRouteMiddleware } from '../../middleware/private-route.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -45,6 +46,7 @@ export default class OfferController extends Controller {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDTOMiddleware(CreateOfferDto),
       ],
     });
@@ -57,12 +59,16 @@ export default class OfferController extends Controller {
       path: ControllerRoute.Favorite,
       method: HttpMethod.Get,
       handler: this.showFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ],
     });
     this.addRoute({
       path: `${ControllerRoute.Favorite}${ControllerRoute.Offer}`,
       method: HttpMethod.Patch,
       handler: this.changeFavorite,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
         new DocumentExistsMiddleware(this.offerService, EntityName.Offer, ObjectIdParam.OfferId)
       ],
@@ -81,6 +87,7 @@ export default class OfferController extends Controller {
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
         new ValidateDTOMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offerService, EntityName.Offer, ObjectIdParam.OfferId)
@@ -91,6 +98,7 @@ export default class OfferController extends Controller {
       method: HttpMethod.Delete,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
         new DocumentExistsMiddleware(this.offerService, EntityName.Offer, ObjectIdParam.OfferId)
       ],
@@ -109,10 +117,10 @@ export default class OfferController extends Controller {
   }
 
   public async create(
-    { body }: Request<UnknownRecord, UnknownRecord, CreateOfferDto>,
+    { body, user }: Request<UnknownRecord, UnknownRecord, CreateOfferDto>,
     res: Response
   ): Promise<void> {
-    const result = await this.offerService.create(body);
+    const result = await this.offerService.create({...body, userId:user.id});
     const offer = await this.offerService.findById(result.id);
     this.created(res, fillDTO(OfferFullRdo, offer));
   }

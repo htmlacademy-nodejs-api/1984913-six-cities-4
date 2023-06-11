@@ -77,7 +77,6 @@ export default class CreateOfferDto {
   })
   public goods!: GoodType[];
 
-  @IsMongoId({ message: 'userId field must be valid id' })
   public userId!: string;
 
   @IsMongoId({ message: 'locationId field must be valid id' })
