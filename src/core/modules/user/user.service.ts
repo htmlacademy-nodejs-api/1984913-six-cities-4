@@ -48,7 +48,7 @@ export default class UserService implements UserServiceInterface {
   public async verifyUser(dto: LoginUserDto, salt: string): Promise<DocumentType<UserEntity> | null> {
     const user = await this.findByEmail(dto.email);
 
-    if (! user) {
+    if (!user) {
       return null;
     }
 

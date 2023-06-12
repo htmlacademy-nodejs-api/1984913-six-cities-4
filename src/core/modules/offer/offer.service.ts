@@ -51,14 +51,6 @@ export default class OfferService implements OfferServiceInterface {
     return this.offerModel.find({ isPremium: true, city: city }, {}, { limit: PREMIUM_OFFERS_AMOUNT }).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
   }
 
-  public async findFavorite(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find({ isFavorite: true }).populate(['userId', 'locationId']).exec();
-  }
-
-  public async updateFavoriteStatus(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    const offer = await this.offerModel.findById(offerId);
-    return this.offerModel.findByIdAndUpdate(offerId, { isFavorite: !offer?.isFavorite }, { new: true }).populate(['userId', 'locationId']).exec();
-  }
 
   public async updateCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     const currentRating = await this.countRating(offerId);

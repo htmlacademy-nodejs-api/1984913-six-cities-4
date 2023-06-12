@@ -35,7 +35,7 @@ export default class CreateOfferDto {
   public isFavorite!: boolean;
 
   @IsInt({ message: 'Rating must be an integer' })
-  @Min(OfferRating.Min, { message: `Minimum rating is ${OfferRating.Min}` })
+  @Min(OfferRating.Default, { message: `Minimum rating is ${OfferRating.Default}` })
   @Max(OfferRating.Max, { message: `Maximum rating is ${OfferRating.Max}` })
   public rating!: number;
 
