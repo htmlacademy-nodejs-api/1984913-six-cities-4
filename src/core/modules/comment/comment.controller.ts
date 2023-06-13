@@ -16,6 +16,7 @@ import { ParamsOfferDetails } from '../../../types/params-details.type.js';
 import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.middleware.js';
 import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
 import { DocumentExistsMiddleware } from '../../middleware/document-exists.middleware.js';
+import { PrivateRouteMiddleware } from '../../middleware/private-route.middleware.js';
 
 @injectable()
 export default class CommentController extends Controller {
@@ -38,6 +39,7 @@ export default class CommentController extends Controller {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
         new ValidateDTOMiddleware(CreateCommentDTO),
         new DocumentExistsMiddleware(this.offerService, EntityName.Offer, ObjectIdParam.OfferId),
@@ -66,12 +68,13 @@ export default class CommentController extends Controller {
   public async create(
     {
       body,
+      user,
       params,
     }: Request<ParamsOfferDetails, UnknownRecord, CreateCommentDTO>,
     res: Response
   ): Promise<void> {
     const offerId = params.offerId || '';
-    const result = await this.commentService.create({ ...body, offerId });
+    const result = await this.commentService.create({ ...body, offerId, userId:user.id });
     await this.offerService.updateCommentCount(offerId);
     this.created(res, fillDTO(CommentRdo, result));
   }

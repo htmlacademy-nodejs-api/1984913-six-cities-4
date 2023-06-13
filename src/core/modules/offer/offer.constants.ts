@@ -23,6 +23,7 @@ export const OfferGuestsAmount = {
 };
 
 export const OfferRating = {
+  Default:0,
   Min: 1,
   Max: 5,
   Decimals:1,

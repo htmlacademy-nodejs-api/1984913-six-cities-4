@@ -18,7 +18,11 @@ export const ErrorMessage = {
   Config: 'Can\'t read .env file. Perhaps the file does not exist.',
   DbConnect:'Already connected to database',
   DbConnectFail:'Failed to connect to the database.',
-  DbDisconnect:'Not connected to the database'
+  DbDisconnect:'Not connected to the database',
+  Unauthorized:'Unauthorized',
+  InvalidToken:'Invalid token',
+  Undefined:'User undefined',
+  NoStatus: 'There is no status query (true or false)'
 }as const;
 
 export const InfoMessage = {
@@ -45,7 +49,6 @@ export const ControllerRoute = {
   Avatar: '/avatar',
   Register:'/register',
   Login:'/login',
-  Logout:'/logout',
   Comment: '/comments'
 };
 
@@ -59,6 +62,8 @@ export const CommandName = {
 export const MiddlewareName = {
   DocumentExists:'DocumentExistsMiddleware',
   ValidateObjectId:'ValidateObjectIdMiddleware',
+  Authenticate:'AuthenticateMiddleware',
+  PrivateRoute:'PrivateRouteMiddleware',
 } as const;
 
 export const ObjectIdParam = {

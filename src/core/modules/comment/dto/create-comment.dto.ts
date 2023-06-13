@@ -1,4 +1,4 @@
-import { Length, IsInt, Min, Max, IsMongoId } from 'class-validator';
+import { Length, IsInt, Min, Max } from 'class-validator';
 import { CommentLength } from '../comment.constants.js';
 import { OfferRating } from '../../offer/offer.constants.js';
 
@@ -15,6 +15,5 @@ export default class CreateCommentDTO {
 
   public offerId!: string;
 
-  @IsMongoId({ message: 'userId field must be a valid id' })
   public userId!: string;
 }

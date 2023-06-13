@@ -51,13 +51,9 @@ export default class OfferService implements OfferServiceInterface {
     return this.offerModel.find({ isPremium: true, city: city }, {}, { limit: PREMIUM_OFFERS_AMOUNT }).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
   }
 
-  public async findFavorite(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find({ isFavorite: true }).populate(['userId', 'locationId']).exec();
-  }
-
-  public async updateFavoriteStatus(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    const offer = await this.offerModel.findById(offerId);
-    return this.offerModel.findByIdAndUpdate(offerId, { isFavorite: !offer?.isFavorite }, { new: true }).populate(['userId', 'locationId']).exec();
+  public async findFavorite(favoriteList:string[]):Promise<DocumentType<OfferEntity>[]| null>{
+    const ids = favoriteList.map((item)=>new Types.ObjectId(item));
+    return await this.offerModel.find({_id:{$in: ids }}).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
   }
 
   public async updateCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
@@ -92,7 +88,7 @@ export default class OfferService implements OfferServiceInterface {
         {$group:{_id:null, averageRating:{$avg:'$result.rating'}}},
         { $unset: 'result' },
       ]);
-    return currentOfferWithRating[0] ? currentOfferWithRating[0].averageRating.toFixed(OfferRating.Decimals) : OfferRating.Min;
+    return currentOfferWithRating[0] ? currentOfferWithRating[0].averageRating.toFixed(OfferRating.Decimals) : OfferRating.Default;
   }
 
   public async exists(documentId: string): Promise<boolean> {
