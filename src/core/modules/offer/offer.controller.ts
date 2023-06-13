@@ -21,6 +21,7 @@ import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.m
 import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
 import { DocumentExistsMiddleware } from '../../middleware/document-exists.middleware.js';
 import { PrivateRouteMiddleware } from '../../middleware/private-route.middleware.js';
+import { UserServiceInterface } from '../user/user-service.interface.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -30,7 +31,9 @@ export default class OfferController extends Controller {
     @inject(AppComponent.LoggerInterface)
     protected readonly logger: LoggerInterface,
     @inject(AppComponent.OfferServiceInterface)
-    private readonly offerService: OfferServiceInterface
+    private readonly offerService: OfferServiceInterface,
+    @inject(AppComponent.UserServiceInterface)
+    private readonly userService: UserServiceInterface
   ) {
     super(logger);
 
@@ -65,7 +68,7 @@ export default class OfferController extends Controller {
     });
     this.addRoute({
       path: `${ControllerRoute.Favorite}${ControllerRoute.Offer}`,
-      method: HttpMethod.Patch,
+      method: HttpMethod.Post,
       handler: this.changeFavorite,
       middlewares: [
         new PrivateRouteMiddleware(),
@@ -106,18 +109,23 @@ export default class OfferController extends Controller {
   }
 
   public async index(
-    {
+    {user,
       query,
     }: Request<UnknownRecord, UnknownRecord, UnknownRecord, RequestQueryLimit>,
     res: Response
   ): Promise<void> {
     const offers = await this.offerService.find(query.limit);
+    if(!user){
+      offers.map((offer)=>{
+        offer.isFavorite = false;
+      });
+    }
     const offersToResponse = fillDTO(OfferMinRdo, offers);
     this.ok(res, offersToResponse);
   }
 
   public async create(
-    { body, user }: Request<UnknownRecord, UnknownRecord, CreateOfferDto>,
+    { user, body}: Request<UnknownRecord, UnknownRecord, CreateOfferDto>,
     res: Response
   ): Promise<void> {
     const result = await this.offerService.create({...body, userId:user.id});
@@ -149,18 +157,40 @@ export default class OfferController extends Controller {
     this.ok(res, offersToResponse);
   }
 
-  public async showFavorite(_req: Request, res: Response): Promise<void> {
-    const offers = await this.offerService.findFavorite();
+  public async showFavorite({user}: Request, res: Response): Promise<void> {
+    if(!user){
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        ErrorMessage.Unauthorized,
+        this.name
+      );
+    }
+    const favoriteList = await this.userService.getFavoriteListInfo(user.id);
+    if(!favoriteList){
+      throw new HttpError(
+        StatusCodes.NO_CONTENT,
+        ErrorMessage.NoStatus,
+        this.name
+      );
+    }
+    const offers = await this.offerService.findFavorite(favoriteList);
+    offers?.map((offer)=>{
+      offer.isFavorite = true;
+    });
+
     const offersToResponse = fillDTO(OfferMinRdo, offers);
     this.ok(res, offersToResponse);
   }
 
   public async showOffer(
-    { params }: Request<ParamsOfferDetails>,
+    {user, params }: Request<ParamsOfferDetails>,
     res: Response
   ): Promise<void> {
     const { offerId } = params;
     const offer = await this.offerService.findById(offerId);
+    if(!user && offer){
+      offer.isFavorite = false;
+    }
     this.ok(res, fillDTO(OfferFullRdo, offer));
   }
 
@@ -179,16 +209,24 @@ export default class OfferController extends Controller {
   }
 
   public async delete(
-    { params }: Request<ParamsOfferDetails>,
+    {user, params }: Request<ParamsOfferDetails>,
     res: Response
   ): Promise<void> {
     const { offerId } = params;
+    if(!user){
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        ErrorMessage.Unauthorized,
+        this.name
+      );
+    }
     const offer = await this.offerService.deleteById(offerId);
+    await this.userService.removeFromFavoriteList(user.id, offerId);
     this.noContent(res, offer);
   }
 
   public async changeFavorite(
-    {
+    { user,
       params,
       query,
     }: Request<
@@ -197,11 +235,10 @@ export default class OfferController extends Controller {
       UnknownRecord,
       RequestQueryStatus
     >,
-    res: Response
+    _res: Response
   ) {
     const { offerId } = params;
     const { status } = query;
-    const offer = await this.offerService.findById(offerId);
 
     if (!status) {
       throw new HttpError(
@@ -211,15 +248,18 @@ export default class OfferController extends Controller {
       );
     }
 
-    if (JSON.parse(status) === offer?.isFavorite) {
+    if(!user){
       throw new HttpError(
         StatusCodes.BAD_REQUEST,
-        `Offer with id ${offerId} has the same status`,
+        ErrorMessage.Unauthorized,
         this.name
       );
     }
 
-    const updatedOffer = await this.offerService.updateFavoriteStatus(offerId);
-    this.ok(res, fillDTO(OfferFullRdo, updatedOffer));
+    if(JSON.parse(status)){
+      await this.userService.addToFavoriteList(user.id, offerId);
+    }else{
+      await this.userService.removeFromFavoriteList(user.id, offerId);
+    }
   }
 }

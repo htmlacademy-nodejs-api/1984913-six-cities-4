@@ -3,4 +3,5 @@ export type User = {
   email: string
   avatarUrl: string
   userStatus: string
+  favoriteList?:string[]
   }

@@ -58,4 +58,41 @@ export default class UserService implements UserServiceInterface {
 
     return null;
   }
+
+  public async addToFavoriteList (userId:string, offerId:string): Promise<DocumentType<UserEntity> | null>{
+    const user = await this.userModel.findById(userId);
+    if(!user){
+      return null;
+    }
+
+    const favoriteList = user.favoriteList || [];
+    const isFavorite = favoriteList.find((offer:string)=> offer === offerId) || false;
+
+    if(isFavorite){
+      return null;
+    }
+    const updatedList = favoriteList.concat(offerId);
+    return await this.updateById(userId, {favoriteList: updatedList});
+  }
+
+  public async removeFromFavoriteList (userId:string, offerId:string): Promise<DocumentType<UserEntity> | null>{
+    const user = await this.userModel.findById(userId);
+    if(!user){
+      return null;
+    }
+
+    const favoriteList = user.favoriteList || [];
+    const offerIndex = favoriteList.indexOf(offerId);
+
+    if(offerIndex === -1){
+      return null;
+    }
+    const updatedList = favoriteList.slice(offerIndex + 1);
+    return await this.updateById(userId, {favoriteList: updatedList});
+  }
+
+  public async getFavoriteListInfo(userId: string): Promise<string[] | null> {
+    const data = await this.userModel.findById(userId, {_id:0, favoriteList:1});
+    return data?.favoriteList || null;
+  }
 }

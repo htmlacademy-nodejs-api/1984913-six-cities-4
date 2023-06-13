@@ -51,6 +51,10 @@ export default class OfferService implements OfferServiceInterface {
     return this.offerModel.find({ isPremium: true, city: city }, {}, { limit: PREMIUM_OFFERS_AMOUNT }).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
   }
 
+  public async findFavorite(favoriteList:string[]):Promise<DocumentType<OfferEntity>[]| null>{
+    const ids = favoriteList.map((item)=>new Types.ObjectId(item));
+    return await this.offerModel.find({_id:{$in: ids }}).sort({createdAt:SORT_TYPE_DOWN}).populate(['userId', 'locationId']).exec();
+  }
 
   public async updateCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     const currentRating = await this.countRating(offerId);
