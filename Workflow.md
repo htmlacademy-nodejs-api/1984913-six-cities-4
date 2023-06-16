@@ -150,6 +150,8 @@ npm run ts ./src/main.cli.ts -- --import ./mocks/mock-data.tsv admin test localh
 
 - `PORT=4001` - номер порта, по которому подключается клиент;
 
+- `HOST=localhost` - номер хоста, по которому запускается сервис;
+
 - `SALT=text` - случайный набор символов для хеширования пароля;
 
 - `DB_USER=admin` - имя пользователя базы данных;
@@ -163,6 +165,8 @@ npm run ts ./src/main.cli.ts -- --import ./mocks/mock-data.tsv admin test localh
 - `DB_NAME=six-cities` - название базы данных;
 
 - `UPLOAD_DIRECTORY=upload` - название директории для загружаемых файлов;
+
+- `STATIC_DIRECTORY=static` - название директории для статичных ресурсов;
 
 - `JWT_SECRET=secret` - строка, которая будет использоваться в процессе шифрования.
 

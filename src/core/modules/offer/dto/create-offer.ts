@@ -1,5 +1,5 @@
 import { CityType, GoodType, HomeType, OfferDescriptionLength, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount, OfferTitleLength, } from '../offer.constants.js';
-import { Length, MaxLength, IsMongoId, IsInt, Min, Max, IsDateString, IsEnum, IsBoolean, IsArray, ArrayMinSize, ArrayMaxSize, } from 'class-validator';
+import { Length, IsMongoId, IsInt, Min, Max, IsDateString, IsEnum, IsBoolean, IsArray, ArrayMinSize, } from 'class-validator';
 
 export default class CreateOfferDto {
   @Length(OfferTitleLength.Min, OfferTitleLength.Max, {
@@ -19,14 +19,6 @@ export default class CreateOfferDto {
     message: `city must be one of ${Object.values(CityType).join(', ')}`,
   })
   public city!: CityType;
-
-  @MaxLength(256, { message: 'Too short for field previewImage' })
-  public previewImage!: string;
-
-  @IsArray({ message: 'Field images must be an array' })
-  @ArrayMinSize(6)
-  @ArrayMaxSize(6)
-  public images!: string[];
 
   @IsBoolean({ message: 'isPremium must be true or false' })
   public isPremium!: boolean;

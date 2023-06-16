@@ -47,7 +47,6 @@ export const ControllerRoute = {
   Favorite:'/favorite',
   UsersList: '/users',
   User:'/:userId',
-  Avatar: '/avatar',
   Register:'/register',
   Login:'/login',
   Comment: '/comments'
@@ -73,6 +72,11 @@ export const ExceptionFilterName = {
   Http:'HttpErrorExceptionFilter',
 } as const;
 
+export const DirectoryPath = {
+  Upload:'/upload',
+  Static:'/static',
+} as const;
+
 export const ObjectIdParam = {
   UserId:'userId',
   OfferId:'offerId',
@@ -83,3 +87,19 @@ export const EntityName = {
   Offer:'Offer',
 } as const;
 
+export const ImageFieldName = {
+  Avatar: 'avatar',
+  Preview: 'preview-image',
+  Image: 'images',
+}as const;
+
+export const STATIC_RESOURCE_FIELDS = [
+  'avatarUrl',
+  'preview-image',
+  'images'
+];
+
+export const DEFAULT_STATIC_IMAGES = [
+  'default-avatar.jpg',
+  'default-room.jpg'
+];
