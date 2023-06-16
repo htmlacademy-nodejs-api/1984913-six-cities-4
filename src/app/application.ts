@@ -22,7 +22,9 @@ export default class Application {
     @inject(AppComponent.OfferController) private readonly offerController: ControllerInterface,
     @inject(AppComponent.UserController) private readonly userController: ControllerInterface,
     @inject(AppComponent.CommentController) private readonly commentController: ControllerInterface,
-    @inject(AppComponent.ExceptionFilterInterface) private readonly exceptionFilter: ExceptionFilterInterface,
+    @inject(AppComponent.BaseExceptionFilter) private readonly baseExceptionFilter: ExceptionFilterInterface,
+    @inject(AppComponent.HttpErrorExceptionFilter) private readonly httpErrorExceptionFilter: ExceptionFilterInterface,
+    @inject(AppComponent.ValidationExceptionFilter) private readonly validationExceptionFilter: ExceptionFilterInterface,
   ) {
     this.expressApplication = express();
   }
@@ -72,7 +74,9 @@ export default class Application {
 
   private async _initExceptionFilters() {
     this.logger.info(`ExceptionFilters ${LoggerInfoMessage.Init}`);
-    this.expressApplication.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+    this.expressApplication.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
+    this.expressApplication.use(this.httpErrorExceptionFilter.catch.bind(this.httpErrorExceptionFilter));
+    this.expressApplication.use(this.baseExceptionFilter.catch.bind(this.baseExceptionFilter));
     this.logger.info(`ExceptionFilters ${LoggerInfoMessage.InitDone}`);
   }
 

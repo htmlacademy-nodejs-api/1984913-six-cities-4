@@ -75,7 +75,7 @@ export default class UserController extends Controller {
     if (existsUser) {
       throw new HttpError(
         StatusCodes.CONFLICT,
-        `User with email "${body.email}" exists.`,
+        `User with email ${body.email} exists.`,
         this.name
       );
     }

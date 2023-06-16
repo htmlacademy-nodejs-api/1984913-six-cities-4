@@ -19,10 +19,11 @@ export const ErrorMessage = {
   DbConnect:'Already connected to database',
   DbConnectFail:'Failed to connect to the database.',
   DbDisconnect:'Not connected to the database',
-  Unauthorized:'Unauthorized',
+  Unauthorized:'User unauthorized',
   InvalidToken:'Invalid token',
   Undefined:'User undefined',
-  NoStatus: 'There is no status query (true or false)'
+  NoStatus: 'There is no status query (true or false)',
+  NoContent: 'No content'
 }as const;
 
 export const InfoMessage = {
@@ -64,6 +65,12 @@ export const MiddlewareName = {
   ValidateObjectId:'ValidateObjectIdMiddleware',
   Authenticate:'AuthenticateMiddleware',
   PrivateRoute:'PrivateRouteMiddleware',
+} as const;
+
+export const ExceptionFilterName = {
+  Base:'BaseExceptionFilter',
+  Validation:'ValidationExceptionFilter',
+  Http:'HttpErrorExceptionFilter',
 } as const;
 
 export const ObjectIdParam = {

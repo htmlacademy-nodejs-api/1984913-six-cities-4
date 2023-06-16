@@ -169,7 +169,7 @@ export default class OfferController extends Controller {
     if(!favoriteList){
       throw new HttpError(
         StatusCodes.NO_CONTENT,
-        ErrorMessage.NoStatus,
+        ErrorMessage.NoContent,
         this.name
       );
     }
