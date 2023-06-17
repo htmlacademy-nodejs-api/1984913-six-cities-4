@@ -7,6 +7,7 @@ import CreateLocationDto from './dto/create-location.dto.js';
 import { LocationType } from '../../../types/offer.type.js';
 import { AppComponent } from '../../../types/app-component.enum.js';
 import { LoggerInfoMessage } from '../../logger/logger.constants.js';
+import { EntityName } from '../../../utils/constants.js';
 
 @injectable()
 export default class LocationService implements LocationServiceInterface {
@@ -17,7 +18,7 @@ export default class LocationService implements LocationServiceInterface {
 
   public async create(dto: CreateLocationDto): Promise<DocumentType<LocationEntity>> {
     const result = await this.locationModel.create(dto);
-    this.logger.info(LoggerInfoMessage.NewData.concat('location'));
+    this.logger.info(LoggerInfoMessage.NewData.concat(EntityName.Location));
     return result;
   }
 

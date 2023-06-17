@@ -3,11 +3,11 @@ import { DocumentType, types } from '@typegoose/typegoose';
 import { OfferEntity } from './offer.entity.js';
 import { OfferServiceInterface } from './offer-service.interface.js';
 import { LoggerInterface } from '../../../types/core/logger.interface.js';
-import CreateOfferDto from './dto/create-offer.js';
+import CreateOfferDto from './dto/create-offer.dto.js';
 import { AppComponent } from '../../../types/app-component.enum.js';
 import { LoggerInfoMessage } from '../../logger/logger.constants.js';
 import { DEFAULT_OFFERS_AMOUNT, OfferRating, PREMIUM_OFFERS_AMOUNT } from './offer.constants.js';
-import UpdateOfferDto from './dto/update-offer.js';
+import UpdateOfferDto from './dto/update-offer.dto.js';
 import { EntityName, SORT_TYPE_DOWN } from '../../../utils/constants.js';
 import { Types } from 'mongoose';
 
