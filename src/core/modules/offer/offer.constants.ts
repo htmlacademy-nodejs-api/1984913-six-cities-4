@@ -1,6 +1,7 @@
 export const DEFAULT_OFFERS_AMOUNT = 60;
 export const PREMIUM_OFFERS_AMOUNT = 3;
 export const DEFAULT_COMMENTS_AMOUNT = 0;
+export const DEFAULT_IMAGES_AMOUNT = 6;
 
 export const OfferTitleLength = {
   Min: 10,

@@ -121,7 +121,6 @@ export default class OfferController extends Controller {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), ImageFieldName.Image)
-
       ],
     });
     this.addRoute({
@@ -300,8 +299,8 @@ export default class OfferController extends Controller {
 
   public async uploadImages(req: Request<ParamsOfferDetails>, res: Response) {
     const {offerId} = req.params;
-    const fileArray = req.files as Array<Express.Multer.File>;
-    const fileNames = fileArray.map((file) => file.filename);
+    const files = req.files as Array<Express.Multer.File>;
+    const fileNames = files.map((file) => file.filename);
     const updatedImages = { images: fileNames};
     await this.offerService.updateById(offerId, updatedImages);
     this.created(res, fillDTO(UploadImagesRdo, updatedImages));

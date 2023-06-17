@@ -12,6 +12,8 @@ import { ControllerRoute, DirectoryPath } from '../utils/constants.js';
 import { ConfigSchema } from '../types/core/config-schema.type.js';
 import { AuthenticateMiddleware } from '../core/middleware/authenticate.middleware.js';
 import { getFullServerPath } from '../core/helpers/common.js';
+import cors from 'cors';
+
 @injectable()
 export default class Application {
   private expressApplication: Express;
@@ -75,6 +77,7 @@ export default class Application {
     );
     const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('JWT_SECRET'));
     this.expressApplication.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
+    this.expressApplication.use(cors());
     this.logger.info(`Global middleware ${LoggerInfoMessage.InitDone}`);
   }
 

@@ -1,4 +1,4 @@
-import { CityType, GoodType, HomeType, OfferDescriptionLength, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount, OfferTitleLength,} from '../offer.constants.js';
+import { CityType, DEFAULT_IMAGES_AMOUNT, GoodType, HomeType, OfferDescriptionLength, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount, OfferTitleLength,} from '../offer.constants.js';
 import {
   Length, MaxLength, IsMongoId, IsInt, Min, Max, IsDateString, IsEnum, IsBoolean, IsArray, ArrayMinSize, ArrayMaxSize, IsOptional,} from 'class-validator';
 export default class UpdateOfferDto {
@@ -30,8 +30,8 @@ export default class UpdateOfferDto {
 
   @IsOptional()
   @IsArray({ message: 'Field images must be an array' })
-  @ArrayMinSize(6)
-  @ArrayMaxSize(6)
+  @ArrayMinSize(DEFAULT_IMAGES_AMOUNT)
+  @ArrayMaxSize(DEFAULT_IMAGES_AMOUNT)
   public images?: string[];
 
   @IsOptional()

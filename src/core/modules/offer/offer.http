@@ -63,7 +63,7 @@ Authorization: Bearer {{authToken}}
 
 {
     "title": "Предложение 8",
-    "description": "Длинное описание предложения  2"
+    "description": "Длинное описание предложения 2"
   }
 
 ###
