@@ -294,18 +294,15 @@ export default class OfferController extends Controller {
   public async uploadPreview(req: Request<ParamsOfferDetails>, res: Response) {
     const {offerId} = req.params;
     const updatedPreview = { previewImage: req.file?.filename };
-
     await this.offerService.updateById(offerId, updatedPreview);
-    this.created(res, fillDTO(UploadPreviewRdo, {updatedPreview}));
+    this.created(res, fillDTO(UploadPreviewRdo, updatedPreview));
   }
 
   public async uploadImages(req: Request<ParamsOfferDetails>, res: Response) {
     const {offerId} = req.params;
     const fileArray = req.files as Array<Express.Multer.File>;
     const fileNames = fileArray.map((file) => file.filename);
-
     const updatedImages = { images: fileNames};
-
     await this.offerService.updateById(offerId, updatedImages);
     this.created(res, fillDTO(UploadImagesRdo, updatedImages));
   }

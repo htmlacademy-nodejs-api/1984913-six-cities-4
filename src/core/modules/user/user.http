@@ -1,4 +1,5 @@
 # Пользователи
+@userId={{login.response.body.id}}
 @authToken={{login.response.body.token}}
 ## Создать нового пользователя (5.8)
 
@@ -38,7 +39,7 @@ Content-Type: application/json
 
 ## Отправить аватар
 
-POST http://localhost:4000/users/6479c46397c2048299e59976/avatar HTTP/1.1
+POST http://localhost:4000/users/{{userId}}/avatar HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW

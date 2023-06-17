@@ -89,13 +89,13 @@ export const EntityName = {
 
 export const ImageFieldName = {
   Avatar: 'avatar',
-  Preview: 'preview-image',
+  Preview: 'previewImage',
   Image: 'images',
 }as const;
 
 export const STATIC_RESOURCE_FIELDS = [
   'avatarUrl',
-  'preview-image',
+  'previewImage',
   'images'
 ];
 
