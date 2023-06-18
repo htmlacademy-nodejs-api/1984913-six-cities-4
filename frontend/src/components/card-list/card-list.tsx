@@ -1,6 +1,6 @@
 import type { SortName } from '../../types/types';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setSorting } from '../../store/site-process/site-process';
@@ -11,6 +11,7 @@ import Spinner from '../spinner/spinner';
 import { getCity, getSorting } from '../../store/site-process/selectors';
 import { getIsOffersLoading, selectOffers } from '../../store/site-data/selectors';
 import CardListEmpty from '../card-list-empty/card-list-empty';
+import { fetchOffers } from '../../store/action';
 
 const CardList = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -19,6 +20,9 @@ const CardList = (): JSX.Element => {
   const isOffersLoading = useAppSelector(getIsOffersLoading);
   const offers = useAppSelector(selectOffers);
   const [activeOffer, setActiveOffer] = useState<string | null>(null);
+  useEffect(() => {
+    dispatch(fetchOffers());
+  }, [dispatch]);
 
   const isEmpty = offers.length === 0;
 
