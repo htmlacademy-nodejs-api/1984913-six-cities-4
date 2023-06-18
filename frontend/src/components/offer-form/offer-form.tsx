@@ -1,11 +1,13 @@
-import { FormEvent, useCallback, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import Select from 'react-select';
 
 import { City, NewOffer, Offer } from '../../types/types';
 
 import LocationPicker from '../location-picker/location-picker';
-import { CITIES, CityLocation, GOODS, TYPES } from '../../const';
+import { AppRoute, CITIES, CityLocation, GOODS, TYPES } from '../../const';
 import { capitalize } from '../../utils';
+import { nanoid } from '@reduxjs/toolkit';
+import { useLocation } from 'react-router-dom';
 
 enum FormFieldName {
   title = 'title',
@@ -82,6 +84,11 @@ const OfferForm = <T extends Offer | NewOffer>({
   } = offer;
   const [chosenLocation, setChosenLocation] = useState(location);
   const [chosenCity, setChosenCity] = useState(city);
+  const [offerImages, setOfferImages] = useState<File[]>( []);
+  const [newPreviewImage, setNewPreviewImage] = useState<File | undefined>();
+  const pageLocation = useLocation();
+  const pathname = pageLocation.pathname;
+  const isNewOffer = pathname === AppRoute.Add;
 
   const handleCityChange = (value: keyof typeof CityLocation) => {
     setChosenCity(getCity(value));
@@ -95,6 +102,22 @@ const OfferForm = <T extends Offer | NewOffer>({
     []
   );
 
+  const handlePreviewImageUpload = (evt: ChangeEvent<HTMLInputElement>) => {
+    if (!evt.target.files) {
+      return;
+    }
+    setNewPreviewImage(evt.target.files[0]);
+  };
+
+  const handleOfferImagesUpload = (evt: ChangeEvent<HTMLInputElement>) => {
+    if (!evt.target.files) {
+      return;
+    }
+    const amount = 1;
+    const index = Number(evt.target.name.substring(evt.target.name.length - amount));
+    setOfferImages([...offerImages.slice(0, index), evt.target.files[0], ...offerImages.slice(index + 1)]);
+  };
+
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -104,7 +127,7 @@ const OfferForm = <T extends Offer | NewOffer>({
       title: formData.get(FormFieldName.title),
       description: formData.get(FormFieldName.description),
       city: getCity(formData.get(FormFieldName.cityName)),
-      previewImage: formData.get(FormFieldName.previewImage),
+      previewImage: newPreviewImage ? newPreviewImage : formData.get(FormFieldName.previewImage),
       isPremium: Boolean(formData.get(FormFieldName.isPremium)),
       type: formData.get(FormFieldName.type),
       bedrooms: Number(formData.get(FormFieldName.bedrooms)),
@@ -117,6 +140,7 @@ const OfferForm = <T extends Offer | NewOffer>({
 
     onSubmit(data);
   };
+
 
   return (
     <form
@@ -176,12 +200,22 @@ const OfferForm = <T extends Offer | NewOffer>({
           name={FormFieldName.previewImage}
           id="previewImage"
           required
-          defaultValue={previewImage}
+          defaultValue={newPreviewImage ? URL.createObjectURL(newPreviewImage) : previewImage}
+        />
+        <input
+          className="form__input offer-form__text-input"
+          type="file"
+          placeholder="Preview image"
+          name="previewImage"
+          id="previewImage"
+          accept="image/png, image/jpeg"
+          onChange={handlePreviewImageUpload}
+          required={isNewOffer}
         />
       </div>
       <fieldset className="images-fieldset">
         {images.map((image, index) => (
-          <div key={image} className="form__input-wrapper">
+          <div key={nanoid()} className="form__input-wrapper">
             <label htmlFor={`image=${index}`} className="offer-form__label">
           Offer Image #{index + 1}
             </label>
@@ -192,7 +226,16 @@ const OfferForm = <T extends Offer | NewOffer>({
               name={`${FormFieldName.image}-${index}`}
               id={`image-${index}`}
               required
-              defaultValue={image}
+              defaultValue={offerImages[index] ? URL.createObjectURL(offerImages[index]) : image}
+            />
+            <input
+              className="form__input offer-form__text-input"
+              type="file"
+              placeholder="Offer image"
+              name={`image-${index}`}
+              id={`images-${index}`}
+              onChange={handleOfferImagesUpload}
+              required={isNewOffer}
             />
           </div>
         ))}
