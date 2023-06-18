@@ -27,7 +27,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "title": "Новое предложение 7",
+    "title": "Новое предложение 1",
     "description": "Длинное описание предложения",
     "postDate": "2023-05-27T10:36:01.154Z",
     "city": "Paris",
@@ -101,7 +101,7 @@ Authorization: Bearer {{authToken}}
 Content-Disposition: form-data; name="previewImage"; filename="pic.png"
 Content-Type: image/png
 
-< \Users\admin\Desktop\pic.png
+< ../../../static/default-room.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###
@@ -113,39 +113,39 @@ Authorization: Bearer {{authToken}}
 
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="pic.png"
+Content-Disposition: form-data; name="images"; filename="apartment-01.jpg"
 Content-Type: image/png
 
-< \Users\admin\Desktop\pic.png
+< ../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="pic.png"
+Content-Disposition: form-data; name="images"; filename="apartment-01.jpg"
 Content-Type: image/png
 
-< \Users\admin\Desktop\pic.png
+< ../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="pic.png"
+Content-Disposition: form-data; name="images"; filename="apartment-02.jpg"
 Content-Type: image/png
 
-< \Users\admin\Desktop\pic.png
+< ../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="pic.png"
+Content-Disposition: form-data; name="images"; filename="apartment-02.jpg"
 Content-Type: image/png
 
-< \Users\admin\Desktop\pic.png
+< ../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="pic.png"
+Content-Disposition: form-data; name="images"; filename="apartment-03.jpg"
 Content-Type: image/png
 
-< \Users\admin\Desktop\pic.png
+< ../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="pic.png"
+Content-Disposition: form-data; name="images"; filename="apartment-03.jpg"
 Content-Type: image/png
 
-< \Users\admin\Desktop\pic.png
+< ../../../static/default-room.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ###

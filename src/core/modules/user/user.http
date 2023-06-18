@@ -46,7 +46,7 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0g
 Content-Disposition: form-data; name="avatar"; filename="pic.png"
 Content-Type: image/png
 
-< \Users\admin\Desktop\pic.png
+< ../../../static/default-avatar.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###

@@ -74,4 +74,4 @@ export type CommentAuth = NewComment &
   Pick<Offer, 'id'>;
 export type FavoriteAuth = Offer['id'];
 export type UserRegister = Omit<User, 'avatarUrl'> &
-  Pick<UserAuth, 'password'> & { avatar?: File };
+  Pick<UserAuth, 'password'> & { avatar?: string };

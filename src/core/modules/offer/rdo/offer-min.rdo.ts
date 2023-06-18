@@ -1,5 +1,6 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { CityType, HomeType } from '../offer.constants.js';
+import UserRdo from '../../user/rdo/user.rdo.js';
 
 export default class OfferMinRdo{
   @Expose()
@@ -31,6 +32,10 @@ export default class OfferMinRdo{
 
   @Expose()
   public price!: number;
+
+  @Expose({ name: 'userId'})
+  @Type(()=>UserRdo)
+  public user!: UserRdo;
 
   @Expose()
   public commentCount!: number;

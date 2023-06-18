@@ -24,6 +24,7 @@ export type SiteProcess = {
 export type UserProcess = {
     authorizationStatus: AuthorizationStatus;
     user: User['email'];
+    avatarUrl:string;
 }
 
 export type State = ReturnType<typeof store.getState>;

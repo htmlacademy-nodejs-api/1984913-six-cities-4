@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getFavoriteOffers } from '../../store/site-data/selectors';
-import { getIsAuthorized, getUser } from '../../store/user-process/selectors';
+import { getIsAuthorized, getUser, getUserAvatar } from '../../store/user-process/selectors';
 import { logoutUser } from '../../store/action';
 
 const pagesWithoutNavigation = [AppRoute.Login, AppRoute.Register];
@@ -13,6 +13,7 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const isAuthorized = useAppSelector(getIsAuthorized);
   const user = useAppSelector(getUser);
+  const userAvatar = useAppSelector(getUserAvatar);
   const favoriteOffers = useAppSelector(getFavoriteOffers);
 
   const handleLogoutClick = () => {
@@ -62,7 +63,9 @@ const Header = () => {
                         className="header__nav-link header__nav-link--profile"
                         to={AppRoute.Favorites}
                       >
-                        <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                        <div className="header__avatar-wrapper user__avatar-wrapper">
+                          <img src={userAvatar} alt="Аватар пользователя" />
+                        </div>
                         <span className="header__user-name user__name">
                           {user}
                         </span>

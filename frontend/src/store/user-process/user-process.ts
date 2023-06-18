@@ -6,7 +6,8 @@ import { AuthorizationStatus, StoreSlice } from '../../const';
 
 const initialState: UserProcess = {
   authorizationStatus: AuthorizationStatus.Unknown,
-  user: ''
+  user: '',
+  avatarUrl:''
 };
 
 export const userProcess = createSlice({
@@ -16,7 +17,8 @@ export const userProcess = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchUserStatus.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = action.payload.email;
+        state.avatarUrl = action.payload.avatarUrl;
         state.authorizationStatus = AuthorizationStatus.Auth;
       })
       .addCase(fetchUserStatus.rejected, (state) => {

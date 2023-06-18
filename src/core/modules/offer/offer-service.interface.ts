@@ -1,7 +1,7 @@
 import { DocumentType } from '@typegoose/typegoose';
-import CreateOfferDto from './dto/create-offer.js';
+import CreateOfferDto from './dto/create-offer.dto.js';
 import { OfferEntity } from './offer.entity';
-import UpdateOfferDto from './dto/update-offer.js';
+import UpdateOfferDto from './dto/update-offer.dto.js';
 import { DocumentExistsInterface } from '../../../types/core/document-exists.interface.js';
 
 export interface OfferServiceInterface extends DocumentExistsInterface {

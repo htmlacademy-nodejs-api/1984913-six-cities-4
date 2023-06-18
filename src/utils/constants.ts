@@ -85,6 +85,7 @@ export const ObjectIdParam = {
 export const EntityName = {
   User:'User',
   Offer:'Offer',
+  Location: 'Location'
 } as const;
 
 export const ImageFieldName = {
