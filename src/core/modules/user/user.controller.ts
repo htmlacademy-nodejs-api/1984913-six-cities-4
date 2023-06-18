@@ -25,7 +25,7 @@ import UploadAvatarRdo from './rdo/upload-avatar.rdo.js';
 
 @injectable()
 export default class UserController extends Controller {
-  private readonly name = AppComponent.UserController.description;
+  private readonly name = 'UserController';
   constructor(
     @inject(AppComponent.LoggerInterface)
     protected readonly logger: LoggerInterface,
@@ -36,7 +36,7 @@ export default class UserController extends Controller {
   ) {
     super(logger, configService);
 
-    this.logger.info(LoggerInfoMessage.RegisterRoute.concat('UserController'));
+    this.logger.info(LoggerInfoMessage.RegisterRoute.concat(this.name));
 
     this.addRoute({
       path: ControllerRoute.Login,

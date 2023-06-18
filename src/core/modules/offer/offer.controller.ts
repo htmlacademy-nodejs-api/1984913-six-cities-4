@@ -30,7 +30,7 @@ import UploadImagesRdo from './rdo/upload-images.rdo.js';
 
 @injectable()
 export default class OfferController extends Controller {
-  private readonly name = AppComponent.OfferController.description;
+  private readonly name = 'OfferController';
 
   constructor(
     @inject(AppComponent.LoggerInterface)
@@ -44,7 +44,7 @@ export default class OfferController extends Controller {
   ) {
     super(logger, configService);
 
-    this.logger.info(LoggerInfoMessage.RegisterRoute.concat('OfferController'));
+    this.logger.info(LoggerInfoMessage.RegisterRoute.concat(this.name));
 
     this.addRoute({
       path: ControllerRoute.Main,

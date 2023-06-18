@@ -2,7 +2,6 @@ import { LoggerInterface } from '../../types/core/logger.interface.js';
 
 export default class ConsoleLoggerService implements LoggerInterface {
 
-
   public info(message: string, ...args: unknown[]): void {
     console.info(message, ...args);
   }

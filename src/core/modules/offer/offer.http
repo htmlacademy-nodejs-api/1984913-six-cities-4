@@ -99,9 +99,9 @@ Authorization: Bearer {{authToken}}
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="previewImage"; filename="pic.png"
-Content-Type: image/png
+Content-Type: image/jpeg
 
-< ../../../static/default-room.jpg
+< ../../../../static/default-room.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###
@@ -114,38 +114,38 @@ Authorization: Bearer {{authToken}}
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="images"; filename="apartment-01.jpg"
-Content-Type: image/png
+Content-Type: image/jpeg
 
-< ../../../static/default-room.jpg
+< ../../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="images"; filename="apartment-01.jpg"
-Content-Type: image/png
+Content-Type: image/jpeg
 
-< ../../../static/default-room.jpg
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="images"; filename="apartment-02.jpg"
-Content-Type: image/png
-
-< ../../../static/default-room.jpg
+< ../../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="images"; filename="apartment-02.jpg"
-Content-Type: image/png
+Content-Type: image/jpeg
 
-< ../../../static/default-room.jpg
+< ../../../../static/default-room.jpg
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="apartment-02.jpg"
+Content-Type: image/jpeg
+
+< ../../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="images"; filename="apartment-03.jpg"
-Content-Type: image/png
+Content-Type: image/jpeg
 
-< ../../../static/default-room.jpg
+< ../../../../static/default-room.jpg
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="images"; filename="apartment-03.jpg"
-Content-Type: image/png
+Content-Type: image/jpeg
 
-< ../../../static/default-room.jpg
+< ../../../../static/default-room.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ###

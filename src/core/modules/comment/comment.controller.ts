@@ -22,6 +22,7 @@ import { ConfigInterface } from '../../../types/core/config.interface.js';
 
 @injectable()
 export default class CommentController extends Controller {
+  private readonly name = 'CommentController';
   constructor(
     @inject(AppComponent.LoggerInterface)
     protected readonly logger: LoggerInterface,
@@ -35,7 +36,7 @@ export default class CommentController extends Controller {
     super(logger, configService);
 
     this.logger.info(
-      LoggerInfoMessage.RegisterRoute.concat('CommentController')
+      LoggerInfoMessage.RegisterRoute.concat(this.name)
     );
 
     this.addRoute({

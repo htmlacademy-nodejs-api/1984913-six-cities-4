@@ -23,12 +23,12 @@ export function transformProperty(
   });
 }
 
-const getSinglePath = (target:UnknownRecord, property:string, staticPath:string,uploadPath:string)=>{
+const getSinglePath = (target: UnknownRecord, property: string, staticPath: string, uploadPath: string) => {
   const rootPath = DEFAULT_STATIC_IMAGES.includes(target[property] as string) ? staticPath : uploadPath;
   target[property] = `${rootPath}/${target[property]}`;
 };
 
-function getPathsArray (target:UnknownRecord, property:string, staticPath:string,uploadPath:string){
+function getPathsArray(target: UnknownRecord, property: string, staticPath: string, uploadPath: string) {
   const targetItems = target[property] as string[];
   const resultPaths: string[] = [];
   targetItems.forEach((item) => {
@@ -46,10 +46,10 @@ export function transformObject(
   data: UnknownRecord
 ) {
   return properties.forEach((property) => transformProperty(property, data, (target: UnknownRecord) => {
-    if(target[property] instanceof Array){
-      getPathsArray(target,property, staticPath,uploadPath);
-    }else{
-      getSinglePath(target,property, staticPath,uploadPath);
+    if (target[property] instanceof Array) {
+      getPathsArray(target, property, staticPath, uploadPath);
+    } else {
+      getSinglePath(target, property, staticPath, uploadPath);
     }
   }));
 }
