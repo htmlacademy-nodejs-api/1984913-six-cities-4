@@ -27,6 +27,7 @@ import { ConfigSchema } from '../../../types/core/config-schema.type.js';
 import { UploadFileMiddleware } from '../../middleware/upload-file.middleware.js';
 import UploadPreviewRdo from './rdo/upload-preview.rdo.js';
 import UploadImagesRdo from './rdo/upload-images.rdo.js';
+import { CommentServiceInterface } from '../comment/comment-service.interface.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -39,6 +40,8 @@ export default class OfferController extends Controller {
     protected readonly configService: ConfigInterface<ConfigSchema>,
     @inject(AppComponent.OfferServiceInterface)
     private readonly offerService: OfferServiceInterface,
+    @inject(AppComponent.CommentServiceInterface)
+    private readonly commentService: CommentServiceInterface,
     @inject(AppComponent.UserServiceInterface)
     private readonly userService: UserServiceInterface
   ) {
@@ -248,6 +251,7 @@ export default class OfferController extends Controller {
       );
     }
     const offer = await this.offerService.deleteById(offerId);
+    await this.commentService.deleteByOfferId(offerId);
     await this.userService.removeFromFavoriteList(user.id, offerId);
     this.noContent(res, offer);
   }
