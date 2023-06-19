@@ -1,5 +1,5 @@
 import { CityType, GoodType, HomeType, OfferDescriptionLength, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount, OfferTitleLength, } from '../offer.constants.js';
-import { Length, IsMongoId, IsInt, Min, Max, IsDateString, IsEnum, IsBoolean, IsArray, ArrayMinSize, } from 'class-validator';
+import { Length, IsInt, Min, Max, IsDateString, IsEnum, IsBoolean, IsArray, ArrayMinSize, } from 'class-validator';
 
 export default class CreateOfferDto {
   @Length(OfferTitleLength.Min, OfferTitleLength.Max, {
@@ -71,6 +71,5 @@ export default class CreateOfferDto {
 
   public userId!: string;
 
-  @IsMongoId({ message: 'locationId field must be valid id' })
   public locationId!: string;
 }

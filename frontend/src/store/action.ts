@@ -78,7 +78,6 @@ export const postOffer = createAsyncThunk<Offer, NewOffer, { extra: Extra }>(
     const { data } = await api.post<OfferDto>(ApiRoute.Offers, adaptCreateOfferToServer(newOffer));
 
     if (data) {
-
       const postImageApiRoute = `${ApiRoute.Offers}/${data.id}/${ImageFieldName.Preview}`;
       await api.post(postImageApiRoute, adaptPreviewImageToServer(newOffer.previewImage), {
         headers: { 'Content-Type': 'multipart/form-data boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' },
@@ -105,11 +104,11 @@ export const editOffer = createAsyncThunk<Offer,Offer, { extra: Extra }>(
       headers: { 'Content-Type': 'multipart/form-data boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' },
     });
 
-    const postImagesApiRoute = `${ApiRoute.Offers}/${offer.id}/${ImageFieldName.Image}`;
-    await api.post(postImagesApiRoute, adaptImagesToServer(offer.images), {
-      headers: { 'Content-Type': 'multipart/form-data boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' },
-    });
-
+    if(!offer.images.every((item)=> typeof item === 'string')){
+      const postImagesApiRoute = `${ApiRoute.Offers}/${offer.id}/${ImageFieldName.Image}`;
+      await api.post(postImagesApiRoute, adaptImagesToServer(offer.images), {
+        headers: { 'Content-Type': 'multipart/form-data boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' },
+      });}
     const { data } = await api.patch<OfferDto>(`${ApiRoute.Offers}/${offer.id}`, adaptEditOfferToServer(offer));
     history.push(`${AppRoute.Property}/${data.id}`);
 

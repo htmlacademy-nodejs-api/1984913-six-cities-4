@@ -12,6 +12,8 @@ export default class CreateOfferDto {
 
   public city!: CityType;
 
+  public previewImage?: string;
+
   public isPremium!: boolean;
 
   public isFavorite!: boolean;
@@ -27,6 +29,8 @@ export default class CreateOfferDto {
   public price!: number;
 
   public goods!: GoodType[];
+
+  public images?: string[];
 
   public location!: Location;
 }

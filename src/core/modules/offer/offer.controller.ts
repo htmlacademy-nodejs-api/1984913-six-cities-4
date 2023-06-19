@@ -262,7 +262,7 @@ export default class OfferController extends Controller {
       UnknownRecord,
       RequestQueryStatus
     >,
-    _res: Response
+    res: Response
   ) {
     const { offerId } = params;
     const { status } = query;
@@ -282,11 +282,14 @@ export default class OfferController extends Controller {
         this.name
       );
     }
+    const offer = await this.offerService.findById(offerId);
 
     if(JSON.parse(status)){
       await this.userService.addToFavoriteList(user.id, offerId);
+      this.ok(res, fillDTO(OfferFullRdo, {...offer, isFavorite:true}));
     }else{
       await this.userService.removeFromFavoriteList(user.id, offerId);
+      this.ok(res, fillDTO(OfferFullRdo, {...offer, isFavorite:false}));
     }
   }
 

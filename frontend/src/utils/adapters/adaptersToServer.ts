@@ -47,8 +47,8 @@ export const adaptCreateOfferToServer =
     goods:  offer.goods?.map((good) => good as GoodType),
     guests: offer.maxAdults,
     isFavorite: false,
-    rating: 1,
-    location: offer.city.location
+    rating: 0,
+    location: offer.location,
   });
 
 export const adaptCreateCommentToServer =

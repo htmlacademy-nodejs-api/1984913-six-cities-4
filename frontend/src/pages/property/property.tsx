@@ -11,6 +11,7 @@ import {
   fetchComments,
   postComment,
   deleteOffer,
+  deleteFavorite,
 } from '../../store/action';
 import Spinner from '../../components/spinner/spinner';
 import { capitalize, getStarsWidth, pluralize } from '../../utils';
@@ -45,6 +46,13 @@ const Property = (): JSX.Element | null => {
       dispatch(fetchComments(id));
     }
   }, [params, dispatch]);
+
+  useEffect(() => {
+    const { id } = params;
+    if (id) {
+      dispatch(fetchOffer(id));
+    }
+  }, [commentStatus, dispatch, params]);
 
   useEffect(() => {
     if (offer) {
@@ -90,10 +98,12 @@ const Property = (): JSX.Element | null => {
 
   const handleDeleteClick = () => {
     dispatch(deleteOffer(id));
+    dispatch(deleteFavorite(id));
   };
 
   const handleFormSubmit = (formData: NewComment) => {
     dispatch(postComment({ id, ...formData }));
+    dispatch(fetchOffer(id));
   };
 
   return (

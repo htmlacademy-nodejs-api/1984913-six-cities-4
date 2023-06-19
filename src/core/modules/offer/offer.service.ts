@@ -26,9 +26,8 @@ export default class OfferService implements OfferServiceInterface {
   }
 
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
-    const currentRating = await this.countRating(offerId);
     return this.offerModel
-      .findByIdAndUpdate(offerId, {...dto, rating:currentRating }, { new: true })
+      .findByIdAndUpdate(offerId, dto, { new: true })
       .populate(['userId', 'locationId']).exec();
   }
 
