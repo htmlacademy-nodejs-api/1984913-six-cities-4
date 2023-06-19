@@ -47,18 +47,6 @@ const getCity = (cityName: FormDataEntryValue | null): City => {
   return { name: CITIES[0], location: CityLocation[CITIES[0]] };
 };
 
-// const getImages = (
-//   entries: IterableIterator<[string, FormDataEntryValue]>
-// ): string[] => {
-//   const enteredImages: string[] = [];
-//   for (const entry of entries) {
-//     if (entry[0].startsWith(FormFieldName.image) && typeof entry[1] === 'string') {
-//       enteredImages.push(entry[1]);
-//     }
-//   }
-//   return enteredImages;
-// };
-
 type OfferFormProps<T> = {
   offer: T;
   onSubmit: (offerData: T) => void;
@@ -89,7 +77,7 @@ const OfferForm = <T extends Offer | NewOffer>({
   const pageLocation = useLocation();
   const pathname = pageLocation.pathname;
   const isNewOffer = pathname === AppRoute.Add;
-
+  const MAX_FILES_AMOUNT = 6;
   const handleCityChange = (value: keyof typeof CityLocation) => {
     setChosenCity(getCity(value));
     setChosenLocation(CityLocation[value]);
@@ -110,7 +98,7 @@ const OfferForm = <T extends Offer | NewOffer>({
   };
 
   const handleOfferImagesUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    if (!evt.target.files) {
+    if (!evt.target.files || evt.target.files.length > MAX_FILES_AMOUNT) {
       return;
     }
     setOfferImages(Object.values(evt.target.files));

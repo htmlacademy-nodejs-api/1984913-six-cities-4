@@ -43,7 +43,6 @@ Authorization: Bearer {{authToken}}
     "guests": 6,
     "price": 39319,
     "goods": ["Washer"],
-    "locationId":  "6479c678fbdb82ec7e0bdeef",
     "commentCount": 0
   }
 

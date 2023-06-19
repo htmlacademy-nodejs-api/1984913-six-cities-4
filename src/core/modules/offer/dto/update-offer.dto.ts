@@ -85,4 +85,6 @@ export default class UpdateOfferDto {
   })
   public goods?: GoodType[];
 
+  public locationId?: string;
+
 }

@@ -1,7 +1,7 @@
 import { CityType } from '../../types/city-type.enum.js';
 import { GoodType } from '../../types/good-type.enum.js';
 import { HomeType } from '../../types/home-type.enum.js';
-import CreateLocationDto from '../location/create-location.dto.js';
+import LocationDto from '../location/location.dto.js';
 import UserDto from '../user/user.dto';
 
 export default class OfferDto{
@@ -35,7 +35,7 @@ export default class OfferDto{
 
   public goods!: GoodType[];
 
-  public location!: CreateLocationDto;
+  public location!: LocationDto;
 
   public user!: UserDto;
 

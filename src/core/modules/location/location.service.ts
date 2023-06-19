@@ -4,7 +4,6 @@ import { LoggerInterface } from '../../../types/core/logger.interface.js';
 import { LocationServiceInterface } from './location-service.interface.js';
 import { LocationEntity } from './location.entity.js';
 import CreateLocationDto from './dto/create-location.dto.js';
-import { LocationType } from '../../../types/offer.type.js';
 import { AppComponent } from '../../../types/app-component.enum.js';
 import { LoggerInfoMessage } from '../../logger/logger.constants.js';
 import { EntityName } from '../../../utils/constants.js';
@@ -22,25 +21,8 @@ export default class LocationService implements LocationServiceInterface {
     return result;
   }
 
-  public async findByLocationId(id: string): Promise<DocumentType<LocationEntity>|null> {
-    return this.locationModel.findById(id).exec();
-  }
-
-  public async findByLocation(location: LocationType): Promise<DocumentType<LocationEntity>|null> {
-    return this.locationModel.findOne(location).exec();
-  }
-
   public async findByCity(city:string): Promise<DocumentType<LocationEntity>|null> {
     return this.locationModel.findOne({city:city}).exec();
   }
 
-  public async findByLocationOrCreate(location:LocationType,dto: CreateLocationDto): Promise<DocumentType<LocationEntity>> {
-    const existingLocation = await this.findByLocation(location);
-
-    if (existingLocation) {
-      return existingLocation;
-    }
-
-    return this.create(dto);
-  }
 }

@@ -28,6 +28,7 @@ import { UploadFileMiddleware } from '../../middleware/upload-file.middleware.js
 import UploadPreviewRdo from './rdo/upload-preview.rdo.js';
 import UploadImagesRdo from './rdo/upload-images.rdo.js';
 import { CommentServiceInterface } from '../comment/comment-service.interface.js';
+import { LocationServiceInterface } from '../location/location-service.interface.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -42,6 +43,8 @@ export default class OfferController extends Controller {
     private readonly offerService: OfferServiceInterface,
     @inject(AppComponent.CommentServiceInterface)
     private readonly commentService: CommentServiceInterface,
+    @inject(AppComponent.LocationServiceInterface)
+    private readonly locationService: LocationServiceInterface,
     @inject(AppComponent.UserServiceInterface)
     private readonly userService: UserServiceInterface
   ) {
@@ -158,7 +161,15 @@ export default class OfferController extends Controller {
     { user, body}: Request<UnknownRecord, UnknownRecord, CreateOfferDto>,
     res: Response
   ): Promise<void> {
-    const result = await this.offerService.create({...body, userId:user.id});
+    const locationInfo = await this.locationService.findByCity(body.city);
+    if(!locationInfo){
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        ErrorMessage.Undefined,
+        this.name
+      );
+    }
+    const result = await this.offerService.create({...body, userId:user.id, locationId:locationInfo.id});
     const offer = await this.offerService.findById(result.id);
     this.created(res, fillDTO(OfferFullRdo, offer));
   }
@@ -231,6 +242,17 @@ export default class OfferController extends Controller {
     }: Request<ParamsOfferDetails, UnknownRecord, UpdateOfferDto>,
     res: Response
   ): Promise<void> {
+    if(body.city){
+      const locationInfo = await this.locationService.findByCity(body.city);
+      if(!locationInfo){
+        throw new HttpError(
+          StatusCodes.BAD_REQUEST,
+          ErrorMessage.Undefined,
+          this.name
+        );
+      }
+      body.locationId = locationInfo.id;
+    }
     const updatedOffer = await this.offerService.updateById(
       params.offerId,
       body
