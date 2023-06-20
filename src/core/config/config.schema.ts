@@ -53,10 +53,22 @@ export const configSchema = convict<ConfigSchema>({
     env: 'UPLOAD_DIRECTORY',
     default: null
   },
+  STATIC_DIRECTORY: {
+    doc: 'Directory for static resourses',
+    format: String,
+    env: 'STATIC_DIRECTORY',
+    default: 'static'
+  },
   JWT_SECRET: {
     doc: 'Secret for sign JWT',
     format: String,
     env: 'JWT_SECRET',
     default: null
+  },
+  HOST: {
+    doc: 'Host for service',
+    format: String,
+    env: 'HOST',
+    default: 'localhost'
   }
 });

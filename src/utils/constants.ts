@@ -19,10 +19,11 @@ export const ErrorMessage = {
   DbConnect:'Already connected to database',
   DbConnectFail:'Failed to connect to the database.',
   DbDisconnect:'Not connected to the database',
-  Unauthorized:'Unauthorized',
+  Unauthorized:'User unauthorized',
   InvalidToken:'Invalid token',
   Undefined:'User undefined',
-  NoStatus: 'There is no status query (true or false)'
+  NoStatus: 'There is no status query (true or false)',
+  NoContent: 'No content'
 }as const;
 
 export const InfoMessage = {
@@ -46,7 +47,6 @@ export const ControllerRoute = {
   Favorite:'/favorite',
   UsersList: '/users',
   User:'/:userId',
-  Avatar: '/avatar',
   Register:'/register',
   Login:'/login',
   Comment: '/comments'
@@ -66,6 +66,17 @@ export const MiddlewareName = {
   PrivateRoute:'PrivateRouteMiddleware',
 } as const;
 
+export const ExceptionFilterName = {
+  Base:'BaseExceptionFilter',
+  Validation:'ValidationExceptionFilter',
+  Http:'HttpErrorExceptionFilter',
+} as const;
+
+export const DirectoryPath = {
+  Upload:'/upload',
+  Static:'/static',
+} as const;
+
 export const ObjectIdParam = {
   UserId:'userId',
   OfferId:'offerId',
@@ -74,5 +85,22 @@ export const ObjectIdParam = {
 export const EntityName = {
   User:'User',
   Offer:'Offer',
+  Location: 'Location'
 } as const;
 
+export const ImageFieldName = {
+  Avatar: 'avatar',
+  Preview: 'previewImage',
+  Image: 'images',
+}as const;
+
+export const STATIC_RESOURCE_FIELDS = [
+  'avatarUrl',
+  'previewImage',
+  'images'
+];
+
+export const DEFAULT_STATIC_IMAGES = [
+  'default-avatar.jpg',
+  'default-room.jpg'
+];

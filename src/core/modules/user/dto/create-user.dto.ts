@@ -4,9 +4,6 @@ export default class CreateUserDto {
   @IsEmail({}, { message: 'email must be valid address' })
   public email!: string;
 
-  @IsString({ message: 'avatarUrl is required' })
-  public avatarUrl!: string;
-
   @IsString({ message: 'name is required' })
   @Length(UserNameLength.Min, UserNameLength.Max, {
     message: `Min length is ${UserNameLength.Min}, max is ${UserNameLength.Max}`,

@@ -9,7 +9,7 @@ export const LoggerInfoMessage = {
   NewData:'New data created: ',
   NewRoute:'Route registered: ',
   RegisterRoute:'Register routes for ',
-  RegisterFilter:'Register ExceptionFilter',
+  RegisterFilter:'Register ExceptionFilter: ',
 }as const;
 
 export const LoggerErrorMessage = {

@@ -1,9 +1,10 @@
 import { CliCommandInterface } from '../types/core/cli-command.interface';
 import { ParsedCommand } from '../types/core/command.type.js';
+import { CommandName } from '../utils/constants.js';
 
 export default class CLIApplication{
   private commands:{[propertyName:string]:CliCommandInterface} = {};
-  private defaultCommand = '--help';
+  private defaultCommand = CommandName.Help;
 
   private parseCommand(cliArguments: string[]): ParsedCommand {
     const parsedCommand: ParsedCommand = {};

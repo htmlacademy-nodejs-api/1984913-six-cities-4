@@ -1,6 +1,6 @@
-import { CityType, GoodType, HomeType, OfferDescriptionLength, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount, OfferTitleLength,} from '../offer.constants.js';
+import { CityType, DEFAULT_IMAGES_AMOUNT, GoodType, HomeType, OfferDescriptionLength, OfferGuestsAmount, OfferPrice, OfferRoomsAmount, OfferTitleLength,} from '../offer.constants.js';
 import {
-  Length, MaxLength, IsMongoId, IsInt, Min, Max, IsDateString, IsEnum, IsBoolean, IsArray, ArrayMinSize, ArrayMaxSize, IsOptional,} from 'class-validator';
+  Length, MaxLength, IsInt, Min, Max, IsDateString, IsEnum, IsBoolean, IsArray, ArrayMinSize, ArrayMaxSize, IsOptional,} from 'class-validator';
 export default class UpdateOfferDto {
   @IsOptional()
   @Length(OfferTitleLength.Min, OfferTitleLength.Max, {
@@ -30,8 +30,8 @@ export default class UpdateOfferDto {
 
   @IsOptional()
   @IsArray({ message: 'Field images must be an array' })
-  @ArrayMinSize(6)
-  @ArrayMaxSize(6)
+  @ArrayMinSize(DEFAULT_IMAGES_AMOUNT)
+  @ArrayMaxSize(DEFAULT_IMAGES_AMOUNT)
   public images?: string[];
 
   @IsOptional()
@@ -41,12 +41,6 @@ export default class UpdateOfferDto {
   @IsOptional()
   @IsBoolean({ message: 'isFavorite must be true or false' })
   public isFavorite?: boolean;
-
-  @IsOptional()
-  @IsInt({ message: 'Rating must be an integer' })
-  @Min(OfferRating.Min, { message: `Minimum rating is ${OfferRating.Min}` })
-  @Max(OfferRating.Max, { message: `Maximum rating is ${OfferRating.Max}` })
-  public rating?: number;
 
   @IsOptional()
   @IsEnum(HomeType, {
@@ -91,7 +85,6 @@ export default class UpdateOfferDto {
   })
   public goods?: GoodType[];
 
-  @IsOptional()
-  @IsMongoId({ message: 'locationId field must be valid id' })
   public locationId?: string;
+
 }

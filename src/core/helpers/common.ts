@@ -2,6 +2,9 @@ import * as crypto from 'node:crypto';
 import { plainToInstance, ClassConstructor } from 'class-transformer';
 import * as jose from 'jose';
 import { TokenPayload } from '../../types/token-payload.type';
+import { ValidationError } from 'class-validator';
+import { ValidationErrorField } from '../../types/core/validation-error-field.type';
+import { ServiceError } from '../../types/service-error.enum';
 
 export function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : '';
@@ -16,9 +19,11 @@ export function fillDTO<T, V>(dto: ClassConstructor<T>, plainObject: V) {
   return plainToInstance(dto, plainObject, { excludeExtraneousValues: true });
 }
 
-export function createErrorObject(message: string) {
+export function createErrorObject(serviceError: ServiceError, message: string, details: ValidationErrorField[] = []) {
   return {
-    error: message,
+    errorType: serviceError,
+    message,
+    details: [...details],
   };
 }
 
@@ -28,4 +33,16 @@ export async function createJWT(algorithm: string, jwtSecret: string, payload: T
     .setIssuedAt()
     .setExpirationTime('2d')
     .sign(crypto.createSecretKey(jwtSecret, 'utf-8'));
+}
+
+export function transformErrors(errors: ValidationError[]): ValidationErrorField[] {
+  return errors.map(({property, value, constraints}) => ({
+    property,
+    value,
+    messages: constraints ? Object.values(constraints) : []
+  }));
+}
+
+export function getFullServerPath(host: string, port: number) {
+  return `http://${host}:${port}`;
 }

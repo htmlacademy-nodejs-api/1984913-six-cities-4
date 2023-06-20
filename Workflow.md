@@ -113,8 +113,7 @@ npm run ts ./src/main.cli.ts -- --help
 Создаёт файл в формате tsv с тестовыми данными.
 
 ```bash
-npm run ts ./src/main.cli.ts -- --generate 10 ./mocks/test-data.tsv
-http://localhost:3123/api
+npm run ts ./src/main.cli.ts -- --generate 10 ./mocks/test-data.tsv http://localhost:3123/api
 ```
 
 > Перед запуском команды необходимо запустить сервер с моковыми данными
@@ -150,6 +149,8 @@ npm run ts ./src/main.cli.ts -- --import ./mocks/mock-data.tsv admin test localh
 
 - `PORT=4001` - номер порта, по которому подключается клиент;
 
+- `HOST=localhost` - номер хоста, по которому запускается сервис;
+
 - `SALT=text` - случайный набор символов для хеширования пароля;
 
 - `DB_USER=admin` - имя пользователя базы данных;
@@ -163,6 +164,8 @@ npm run ts ./src/main.cli.ts -- --import ./mocks/mock-data.tsv admin test localh
 - `DB_NAME=six-cities` - название базы данных;
 
 - `UPLOAD_DIRECTORY=upload` - название директории для загружаемых файлов;
+
+- `STATIC_DIRECTORY=static` - название директории для статичных ресурсов;
 
 - `JWT_SECRET=secret` - строка, которая будет использоваться в процессе шифрования.
 

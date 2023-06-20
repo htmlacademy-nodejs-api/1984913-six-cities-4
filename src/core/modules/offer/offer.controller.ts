@@ -8,12 +8,12 @@ import { LoggerInfoMessage } from '../../logger/logger.constants.js';
 import { OfferServiceInterface } from './offer-service.interface';
 import { fillDTO } from '../../helpers/common.js';
 import OfferMinRdo from './rdo/offer-min.rdo.js';
-import CreateOfferDto from './dto/create-offer.js';
+import CreateOfferDto from './dto/create-offer.dto.js';
 import OfferFullRdo from './rdo/offer-full.rdo.js';
 import HttpError from '../../errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
-import UpdateOfferDto from './dto/update-offer.js';
-import { ControllerRoute, EntityName, ErrorMessage, ObjectIdParam } from '../../../utils/constants.js';
+import UpdateOfferDto from './dto/update-offer.dto.js';
+import { ControllerRoute, EntityName, ErrorMessage, ImageFieldName, ObjectIdParam } from '../../../utils/constants.js';
 import { RequestQueryLimit, RequestQueryPremium, RequestQueryStatus,} from '../../../types/request-query.type.js';
 import { UnknownRecord } from '../../../types/unknown-record.type.js';
 import { ParamsOfferDetails } from '../../../types/params-details.type.js';
@@ -22,22 +22,35 @@ import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.
 import { DocumentExistsMiddleware } from '../../middleware/document-exists.middleware.js';
 import { PrivateRouteMiddleware } from '../../middleware/private-route.middleware.js';
 import { UserServiceInterface } from '../user/user-service.interface.js';
+import { ConfigInterface } from '../../../types/core/config.interface.js';
+import { ConfigSchema } from '../../../types/core/config-schema.type.js';
+import { UploadFileMiddleware } from '../../middleware/upload-file.middleware.js';
+import UploadPreviewRdo from './rdo/upload-preview.rdo.js';
+import UploadImagesRdo from './rdo/upload-images.rdo.js';
+import { CommentServiceInterface } from '../comment/comment-service.interface.js';
+import { LocationServiceInterface } from '../location/location-service.interface.js';
 
 @injectable()
 export default class OfferController extends Controller {
-  private readonly name = AppComponent.OfferController.description;
+  private readonly name = 'OfferController';
 
   constructor(
     @inject(AppComponent.LoggerInterface)
     protected readonly logger: LoggerInterface,
+    @inject(AppComponent.ConfigInterface)
+    protected readonly configService: ConfigInterface<ConfigSchema>,
     @inject(AppComponent.OfferServiceInterface)
     private readonly offerService: OfferServiceInterface,
+    @inject(AppComponent.CommentServiceInterface)
+    private readonly commentService: CommentServiceInterface,
+    @inject(AppComponent.LocationServiceInterface)
+    private readonly locationService: LocationServiceInterface,
     @inject(AppComponent.UserServiceInterface)
     private readonly userService: UserServiceInterface
   ) {
-    super(logger);
+    super(logger, configService);
 
-    this.logger.info(LoggerInfoMessage.RegisterRoute.concat('OfferController'));
+    this.logger.info(LoggerInfoMessage.RegisterRoute.concat(this.name));
 
     this.addRoute({
       path: ControllerRoute.Main,
@@ -97,6 +110,26 @@ export default class OfferController extends Controller {
       ],
     });
     this.addRoute({
+      path: ControllerRoute.Offer.concat('/', ImageFieldName.Preview),
+      method: HttpMethod.Post,
+      handler: this.uploadPreview,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), ImageFieldName.Preview)
+      ],
+    });
+    this.addRoute({
+      path: ControllerRoute.Offer.concat('/', ImageFieldName.Image),
+      method: HttpMethod.Post,
+      handler: this.uploadImages,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware(ObjectIdParam.OfferId),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), ImageFieldName.Image)
+      ],
+    });
+    this.addRoute({
       path: ControllerRoute.Offer,
       method: HttpMethod.Delete,
       handler: this.delete,
@@ -128,7 +161,15 @@ export default class OfferController extends Controller {
     { user, body}: Request<UnknownRecord, UnknownRecord, CreateOfferDto>,
     res: Response
   ): Promise<void> {
-    const result = await this.offerService.create({...body, userId:user.id});
+    const locationInfo = await this.locationService.findByCity(body.city);
+    if(!locationInfo){
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        ErrorMessage.Undefined,
+        this.name
+      );
+    }
+    const result = await this.offerService.create({...body, userId:user.id, locationId:locationInfo.id});
     const offer = await this.offerService.findById(result.id);
     this.created(res, fillDTO(OfferFullRdo, offer));
   }
@@ -169,7 +210,7 @@ export default class OfferController extends Controller {
     if(!favoriteList){
       throw new HttpError(
         StatusCodes.NO_CONTENT,
-        ErrorMessage.NoStatus,
+        ErrorMessage.NoContent,
         this.name
       );
     }
@@ -201,6 +242,17 @@ export default class OfferController extends Controller {
     }: Request<ParamsOfferDetails, UnknownRecord, UpdateOfferDto>,
     res: Response
   ): Promise<void> {
+    if(body.city){
+      const locationInfo = await this.locationService.findByCity(body.city);
+      if(!locationInfo){
+        throw new HttpError(
+          StatusCodes.BAD_REQUEST,
+          ErrorMessage.Undefined,
+          this.name
+        );
+      }
+      body.locationId = locationInfo.id;
+    }
     const updatedOffer = await this.offerService.updateById(
       params.offerId,
       body
@@ -221,6 +273,7 @@ export default class OfferController extends Controller {
       );
     }
     const offer = await this.offerService.deleteById(offerId);
+    await this.commentService.deleteByOfferId(offerId);
     await this.userService.removeFromFavoriteList(user.id, offerId);
     this.noContent(res, offer);
   }
@@ -235,7 +288,7 @@ export default class OfferController extends Controller {
       UnknownRecord,
       RequestQueryStatus
     >,
-    _res: Response
+    res: Response
   ) {
     const { offerId } = params;
     const { status } = query;
@@ -255,11 +308,30 @@ export default class OfferController extends Controller {
         this.name
       );
     }
+    const offer = await this.offerService.findById(offerId);
 
     if(JSON.parse(status)){
       await this.userService.addToFavoriteList(user.id, offerId);
+      this.ok(res, fillDTO(OfferFullRdo, {...offer, isFavorite:true}));
     }else{
       await this.userService.removeFromFavoriteList(user.id, offerId);
+      this.ok(res, fillDTO(OfferFullRdo, {...offer, isFavorite:false}));
     }
+  }
+
+  public async uploadPreview(req: Request<ParamsOfferDetails>, res: Response) {
+    const {offerId} = req.params;
+    const updatedPreview = { previewImage: req.file?.filename };
+    await this.offerService.updateById(offerId, updatedPreview);
+    this.created(res, fillDTO(UploadPreviewRdo, updatedPreview));
+  }
+
+  public async uploadImages(req: Request<ParamsOfferDetails>, res: Response) {
+    const {offerId} = req.params;
+    const files = req.files as Array<Express.Multer.File>;
+    const fileNames = files.map((file) => file.filename);
+    const updatedImages = { images: fileNames};
+    await this.offerService.updateById(offerId, updatedImages);
+    this.created(res, fillDTO(UploadImagesRdo, updatedImages));
   }
 }

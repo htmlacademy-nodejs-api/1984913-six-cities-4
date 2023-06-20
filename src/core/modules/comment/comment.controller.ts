@@ -17,21 +17,26 @@ import { ValidateObjectIdMiddleware } from '../../middleware/validate-objectid.m
 import { ValidateDTOMiddleware } from '../../middleware/validate-dto.middleware.js';
 import { DocumentExistsMiddleware } from '../../middleware/document-exists.middleware.js';
 import { PrivateRouteMiddleware } from '../../middleware/private-route.middleware.js';
+import { ConfigSchema } from '../../../types/core/config-schema.type.js';
+import { ConfigInterface } from '../../../types/core/config.interface.js';
 
 @injectable()
 export default class CommentController extends Controller {
+  private readonly name = 'CommentController';
   constructor(
     @inject(AppComponent.LoggerInterface)
     protected readonly logger: LoggerInterface,
+    @inject(AppComponent.ConfigInterface)
+    protected readonly configService: ConfigInterface<ConfigSchema>,
     @inject(AppComponent.CommentServiceInterface)
     private readonly commentService: CommentServiceInterface,
     @inject(AppComponent.OfferServiceInterface)
     private readonly offerService: OfferServiceInterface
   ) {
-    super(logger);
+    super(logger, configService);
 
     this.logger.info(
-      LoggerInfoMessage.RegisterRoute.concat('CommentController')
+      LoggerInfoMessage.RegisterRoute.concat(this.name)
     );
 
     this.addRoute({

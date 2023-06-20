@@ -5,8 +5,10 @@ import { GoodType, OfferGuestsAmount, OfferPrice, OfferRating, OfferRoomsAmount,
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
 import { UserStatus } from '../user/user.constants.js';
 
-const FIRST_WEEK_DAY = 1;
-const LAST_WEEK_DAY = 7;
+const WeekDayRange = {
+  FirstDay: 1,
+  LastDay:7
+} as const;
 
 const statusValues = ['true', 'false'];
 
@@ -31,7 +33,7 @@ export default class OfferGenerator implements OfferGeneratorInterface{
     const rooms = generateRandomValue(OfferRoomsAmount.Min,OfferRoomsAmount.Max);
     const guests = generateRandomValue(OfferGuestsAmount.Min,OfferGuestsAmount.Max);
     const price = generateRandomValue(OfferPrice.Min,OfferPrice.Max);
-    const postDate = dayjs().subtract(generateRandomValue(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day').toISOString();
+    const postDate = dayjs().subtract(generateRandomValue(WeekDayRange.FirstDay, WeekDayRange.LastDay), 'day').toISOString();
     return [
       title, description, postDate, city, previewImage, images, isPremium, isFavorite, rating, type, rooms, guests, price, goods, name, email,avatarUrl, userStatus, latitude,longitude
     ].join('\t');
