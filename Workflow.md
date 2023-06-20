@@ -113,8 +113,7 @@ npm run ts ./src/main.cli.ts -- --help
 Создаёт файл в формате tsv с тестовыми данными.
 
 ```bash
-npm run ts ./src/main.cli.ts -- --generate 10 ./mocks/test-data.tsv
-http://localhost:3123/api
+npm run ts ./src/main.cli.ts -- --generate 10 ./mocks/test-data.tsv http://localhost:3123/api
 ```
 
 > Перед запуском команды необходимо запустить сервер с моковыми данными
